@@ -20,7 +20,7 @@ invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
 
 contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
 contoursbinaryimg = invbinaryimg.copy()
-cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
+cv.drawContours(img, contours, -1, color=(255, 0, 0), thickness=1)
 
 contrastarr = [[0 for j in range(cols)] for i in range(rows)]
 '''
@@ -63,6 +63,7 @@ for c in cnts:
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
     image_number += 1
 
+cv.imshow("img", img)
 cv.imshow("grayimg", grayimg)
 cv.imshow("invbinaryimg", invbinaryimg)
 cv.imshow("betterholesimg", betterholesimg)

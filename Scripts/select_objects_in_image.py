@@ -20,7 +20,7 @@ for c in cnts:
     x,y,w,h = cv2.boundingRect(c)
     cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2)
     ROI = original[y:y+h, x:x+w]
-    cv2.imwrite("ROI_{}.png".format(image_number), ROI)
+    cv2.imwrite("Assets\\Objects\\ROI_{}.png".format(image_number), ROI)
     image_number += 1
 
 #cv2.imshow('masked', image)

@@ -1,4 +1,5 @@
-durly = "pro"
-# durly e pro
-#altcumva nu ma convingi
-#top de top
+while(durly!="inalt"):
+    durly++
+ #h
+print(durly)
+#durly e scund

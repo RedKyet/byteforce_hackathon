@@ -60,7 +60,7 @@ for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
     ROI = img[y:y+h, x:x+w]
-    cv.imwrite("ROI_{}.png".format(image_number), ROI)
+    cv.imwrite("Assets\\Objects\\ROI_{}.png".format(image_number), ROI)
     image_number += 1
 
 cv.imshow("grayimg", grayimg)

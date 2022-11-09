@@ -9,7 +9,8 @@ gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (5,5), 0)
 thresh = cv2.threshold(blur, 245, 255, cv2.THRESH_BINARY_INV)[1]
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9,9))
-#masked = cv2.bitwise_and(original, original, mask=thresh)
+#masked = cv
+# 2.bitwise_and(original, original, mask=thresh)
 #dilate = cv2.dilate(thresh, kernel, iterations=1)
 
 # Find contours, obtain bounding box coordinates, and extract ROI

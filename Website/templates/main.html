@@ -1,4 +1,10 @@
-{% extends '@base.html' %}
+
 
 <h1> Picture: <h1>
-<h1> <img src = "{% placeholder %}"> <h1>
+
+
+    <form action="upload" method="get" enctype="multipart/form-data">
+        {% csrf_token %}  
+        <input type="file" id="file" name="document">
+        <input type="submit">
+      </form>

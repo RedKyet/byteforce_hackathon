@@ -17,8 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 from Website.views import home
+from Website.views import file
+from Website.views import upload
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', home)
+    path('', home),
+    path('upload', upload)
 ]

@@ -1,3 +1,4 @@
+durly = "scund"
 while not durly == "inalt":
     durly += 1
 

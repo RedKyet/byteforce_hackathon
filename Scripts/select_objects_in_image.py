@@ -6,9 +6,10 @@ cv2.waitKey(0)"""
 
 original = image.copy()
 gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-#blur = cv2.GaussianBlur(gray, (5,5), 0)
-thresh = cv2.threshold(gray, 240, 255, cv2.THRESH_BINARY_INV)[1]
+blur = cv2.GaussianBlur(gray, (10,10), 0)
+thresh = cv2.threshold(blur, 245, 255, cv2.THRESH_BINARY_INV)[1]
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9,9))
+masked = cv2.bitwise_and(original, original, mask=thresh)
 #dilate = cv2.dilate(thresh, kernel, iterations=1)
 
 # Find contours, obtain bounding box coordinates, and extract ROI
@@ -22,9 +23,13 @@ for c in cnts:
     cv2.imwrite("ROI_{}.png".format(image_number), ROI)
     image_number += 1
 
+cv2.imshow('masked', image)
 cv2.imshow('image', image)
 cv2.imshow('gray', gray)
 cv2.imshow('thresh', thresh)
+
+#masked = cv2.bitwise_and(image, image, mask=mask)
+
 #cv2.imshow('dilate', dilate)
 cv2.waitKey()
 

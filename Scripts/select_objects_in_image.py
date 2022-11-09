@@ -13,6 +13,8 @@ kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9,9))
 #dilate = cv2.dilate(thresh, kernel, iterations=1)
 
 # Find contours, obtain bounding box coordinates, and extract ROI
+#
+#
 cnts = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 image_number = 0
@@ -22,6 +24,9 @@ for c in cnts:
     ROI = original[y:y+h, x:x+w]
     cv2.imwrite("Assets\\Objects\\ROI_{}.png".format(image_number), ROI)
     image_number += 1
+#
+#
+#
 
 #cv2.imshow('masked', image)
 cv2.imshow('image', image)

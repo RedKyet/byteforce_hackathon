@@ -15,7 +15,6 @@ def upload(request):
     fs = FileSystemStorage()
     
     fs.delete('cache.jpg')
-    
     name = fs.save('cache.jpg', uploaded_file)
     
     # print(fs.url(name))

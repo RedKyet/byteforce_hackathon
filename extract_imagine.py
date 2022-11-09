@@ -43,7 +43,7 @@ import numpy as np
 
 imgname = "fotografietest.png"
 binarythresh = 240
-contrastthresh = 10
+contrastthresh = 40
 
 ##############################################################################################################
 
@@ -54,10 +54,11 @@ grayimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
 
 contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
-contoursbinaryimg = cv.drawContours(invbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
+contoursbinaryimg = invbinaryimg.copy()
+cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
 
 contrastarr = [[0 for j in range(cols)] for i in range(rows)]
-
+'''
 for i in range(rows):
     for j in range(cols):
         if (i > 0):
@@ -68,16 +69,27 @@ for i in range(rows):
             contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i][j-1]))))
         if (j < cols-1):
             contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i][j+1]))))
+'''
+betterholesimg = invbinaryimg.copy()
 
 for i in range(rows):
     for j in range(cols):
-        if invbinaryimg[i][j] == 0 and contrastarr[i][j] < contrastthresh:
-            #invbinaryimg[i][j] = 255
-            pass
+        if invbinaryimg[i][j] == 255 and contoursbinaryimg[i][j] == 255:
+            cnt = 0
+            if i > 0 and invbinaryimg[i-1][j] == 0:
+                cnt += 1
+            if i < rows-1 and invbinaryimg[i+1][j] == 0:
+                cnt += 1
+            if j > 0 and invbinaryimg[i][j-1] == 0:
+                cnt += 1
+            if j < cols-1 and invbinaryimg[i][j+1] == 0:
+                cnt += 1
+            if cnt > 0:
+                betterholesimg[i][j] = 0
 
 cv.imshow("grayimg", grayimg)
 cv.imshow("invbinaryimg", invbinaryimg)
-cv.imshow("contoursbinaryimg", contoursbinaryimg)
+cv.imshow("betterholesimg", betterholesimg)
 
 cv.waitKey(0)
 cv.destroyAllWindows()

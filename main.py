@@ -1,7 +1,4 @@
-durly = "scund"
-while not durly == "inalt":
-    durly += 1
-#steigi
-
-print(durly)
-#durly e scund
+durly = "pro"
+# durly e pro
+#altcumva nu ma convingi
+#top de top

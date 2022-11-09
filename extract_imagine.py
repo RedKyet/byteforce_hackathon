@@ -51,6 +51,10 @@ contrastthresh = 10
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
 grayimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
+
+contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
+contoursbinaryimg = cv.drawContours(invbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
 
 contrastarr = [[0 for j in range(cols)] for i in range(rows)]
 
@@ -65,8 +69,6 @@ for i in range(rows):
         if (j < cols-1):
             contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i][j+1]))))
 
-invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
-
 for i in range(rows):
     for j in range(cols):
         if invbinaryimg[i][j] == 0 and contrastarr[i][j] < contrastthresh:
@@ -75,6 +77,7 @@ for i in range(rows):
 
 cv.imshow("grayimg", grayimg)
 cv.imshow("invbinaryimg", invbinaryimg)
+cv.imshow("contoursbinaryimg", contoursbinaryimg)
 
 cv.waitKey(0)
 cv.destroyAllWindows()

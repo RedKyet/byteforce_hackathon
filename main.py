@@ -1,4 +1,1 @@
-print(durly)
-#durly e scoond
-
-
+print('buna seara')

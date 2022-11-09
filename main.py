@@ -1,2 +1,2 @@
 print(durly)
-#durly e scund
+#durly e scoond

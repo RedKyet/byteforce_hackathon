@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path
 
 from Website.views import home
-from Website.views import file
 from Website.views import upload
 
 urlpatterns = [

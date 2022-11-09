@@ -8,3 +8,4 @@ while not durly == "inalt":
     
 
 print(durly)
+#durly e scund

@@ -143,18 +143,17 @@ cv.imshow("invbinaryimg", invbinaryimg)
 cv.waitKey(0)
 
 #save min and max brightness image
-intensities = []
-for i in range(len(contours)):
-    cimg = np.zeros_like(img)
-    cv.drawContours(cimg, [contours[i]], -1, color=(255,255,255), thickness=-1)
-    pts = np.where(cimg == 255)
-    intensities.append(img[pts[0], pts[1]])
-print(intensities[0])
+intensities = [0] * len(contours)
+nrpixels = [0] * len(contours)
 
-maxi = 0
-intensarray = [0] * len(contours)
-for i in range(len(contours)):
-    intensarray[i] = i
+for i in range(rows):
+    for j in range(cols):
+        aux = obtinere_index(indexedimg, i, j)
+        if aux >= 0:
+            intensities[aux] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
+            nrpixels[aux] += 1
+
+
 
 for i in range(len(contours)-1):
     for j in range(i+1, len(contours)):

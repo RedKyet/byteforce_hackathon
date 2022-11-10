@@ -77,7 +77,7 @@
     fetch(url)
   .then((response) => response.json())
   .then((data) => {
-    imgurl=`http://127.0.0.1:8000/static/users/${data['uid']}/cache.jpg?`+ new Date().getTime();
+    imgurl=`http://127.0.0.1:8000/static/users/${data['uid']}/cake.jpg?`+ new Date().getTime();
     document.getElementById('pozamare').src=imgurl
     console.log(data)
 })

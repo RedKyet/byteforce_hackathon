@@ -1,7 +1,5 @@
 import cv2 as cv
 import math
-import time
-import os
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
@@ -19,6 +17,7 @@ epsilonarie = 5.0
 epsilonper = 0.5
 epsilonbright = 0.005
 epsilondark = 0.005
+symmetrystep = 0.017
 
 ##############################################################################################################
 
@@ -243,7 +242,19 @@ for i in range(len(contours)):
 
 # get symmetry (hard)
 
+for i in range(len(contours)):
+    centroid = (objectcentroidrow[i], objectcentroidcol[i])
+    theta = 0
+    while theta < math.pi:
+        point = (centroid[0] + math.cos(theta), centroid[1] + math.sin(theta))
+        symmetryimg = invbinaryimg.copy()
+        cv.line(symmetryimg, centroid, point, (127, 127, 127), thickness=1, shift=15)
+        theta += symmetrystep
 
+# print object properties
+
+for i in range(len(contours)):
+    print(objectprops[i])
 
 # show images
 

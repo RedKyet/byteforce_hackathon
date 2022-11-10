@@ -134,8 +134,10 @@ cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
 blanc = np.zeros((1, 1, 3), np.uint8)
 cv.imwrite("Assets\\Objects\\rez.png",blanc)
 
+
 for c in cts_by_area:
     x,y,w,h = cv.boundingRect(c)
+    
     element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
 
@@ -156,6 +158,9 @@ for c in cts_by_area:
 
 cv.imshow("only max arie and min per", onlymaxarieminper)
 cv.imshow("invbinaryimg", invbinaryimg)
+cv.imshow("img", img)
+print(type(invbinaryimg))
+print(type(img))
 cv.waitKey(0)
 quit()
 

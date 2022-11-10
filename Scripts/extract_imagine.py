@@ -65,7 +65,7 @@ for c in cnts:
     #cv.drawContours(img, [c], -1, (0,255,255), 1)
     
     element = img[y:y+h, x:x+w]
-    cv.imwrite("Assets\\Objects\\element_{}_cont_{}.png".format(image_number,cv.contourArea(c)), element)
+    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),cv.arcLength(c, True)), element)
     image_number += 1
 
 cv.imshow("grayimg", grayimg)

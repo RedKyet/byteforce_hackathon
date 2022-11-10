@@ -6,7 +6,7 @@
         <div class="container flex flex-wrap justify-between items-center mx-auto">
           <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="flex items-center">
               <img src="/static/logo.png" class="mr-3 h-6 sm:h-9" alt="Byteforce Logo" />
-              <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">placeholder</span>
+              <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">Zmeurică 3.14</span>
           </a>
           <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
             <span class="sr-only">Open main menu</span>
@@ -35,10 +35,33 @@
       </nav>
 
 
+      <style>
+
+
+
+        
+      
+        
+       
+        
+        input[type=file] {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                opacity: 0;
+                outline: 0;
+                border: 1px solid red;
+        }
+        
+        
+       
+        </style>
 
 <h3> Picture: <h3>
 
-    <form class="flex justify-center items-center w-full" action = "upload" method = "post" enctype = "multipart/form-data">
+    {% comment %} <form id="file-drop-area" class="flex justify-center items-center w-full" action = "upload" method = "post" enctype = "multipart/form-data">
         <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
             <div class="flex flex-col justify-center items-center pt-5 pb-6">
                 <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
@@ -48,49 +71,61 @@
             
             <form id = "f" action = "upload" method = "post" enctype = "multipart/form-data">
                 {% csrf_token %}  
-                <input type = "file" id = "dropzone-file" class="hidden" accept = "image/png, image/jpg, image/jpeg" name = "document" onchange="form.submit()">
+                <input type = "file" id = "dropzone-file" class="hidden" accept = "image/png, image/jpg, image/jpeg" name = "document">
             </form>
         </label>
-    </form> 
+    </form>  {% endcomment %}
 
-<form id = "f" action = "upload" method = "post" enctype = "multipart/form-data">
+
+
+
+<form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full" target="frame">
     {% csrf_token %}  
-    <input type = "file" id = "file" accept = "image/png, image/jpg, image/jpeg" name = "document" onchange="form.submit()">
+    <label class="fil flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
+        <div class="flex flex-col justify-center items-center pt-5 pb-6">
+            <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+        </div>
+            <input type="file" name = "document" accept = "image/png, image/jpg, image/jpeg" multiple style="position: absolute;left: 0;top: 0;width: 100%;height: 100%;opacity: 0;outline: 0;border: 1px solid red;">
+            <!-- use multiple, even if it’s not allowed, to be able to show an info text -->
+    </label>
+    
 </form>
 
-
+<!--
+TODO:
+ • add clear/reset option
+ • add validation of type and size
+-->
         <script>
-            var $fileInput = $('.file-input');
-var $droparea = $('.file-drop-area');
 
-// highlight drag area
-$fileInput.on('dragenter focus click', function() {
-  $droparea.addClass('is-active');
-});
 
-// back to normal state
-$fileInput.on('dragleave blur drop', function() {
-  $droparea.removeClass('is-active');
-});
+        
 
-// change inner text
-$fileInput.on('change', function() {
-  var filesCount = $(this)[0].files.length;
-  var $textContainer = $(this).prev();
-
-  if (filesCount === 1) {
-    // if single file is selected, show file name
-    var fileName = $(this).val().split('\\').pop();
-    $textContainer.text(fileName);
-  } else {
-    // otherwise show number of files
-    $textContainer.text(filesCount + ' files selected');
-  }
-});
+           
+                $('input[type=file]').change(function() {
+                        //console.log(this.files);
+                        var f = this.files;
+                        console.log(f)
+                        //var el = $(this).parent();
+                        //if (f.length > 1) {
+                        //        console.log(this.files, 1);
+                        //        el.text('Sorry, multiple files are not allowed');
+                        //        return;
+                        //}
+                        // el.removeClass('focus');
+                        //el.html(f[0].name + '<br>' +'<span class="sml">' +'type: ' + f[0].type + ', ' +Math.round(f[0].size / 1024) + ' KB</span>');
+                        document.getElementById("f").submit()
+                });
+        
+                
+        
+     
         </script>
         
     
-
+        <iframe name="frame" style="display:none"></iframe>
 {% endblock content %}
 
 {% block background %}

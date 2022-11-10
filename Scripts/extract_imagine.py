@@ -140,8 +140,10 @@ cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
 blanc = np.zeros((1, 1, 3), np.uint8)
 cv.imwrite("Assets\\Objects\\rez.png",blanc)
 
+
 for c in cts_by_area:
     x,y,w,h = cv.boundingRect(c)
+    
     element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
 
@@ -160,17 +162,13 @@ for c in cts_by_area:
     #creere imagine prin concatenare
 ########################################################
 
-# keep min brightness and max brightness
-
-intensities = [0] * len(contours)
-nrpixels = [0] * len(contours)
-
-for i in range(rows):
-    for j in range(cols):
-        aux = obtinere_index(indexedimg, i, j)
-        if aux >= 0:
-            intensities[aux] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
-            nrpixels[aux] += 1
+cv.imshow("only max arie and min per", onlymaxarieminper)
+cv.imshow("invbinaryimg", invbinaryimg)
+cv.imshow("img", img)
+print(type(invbinaryimg))
+print(type(img))
+cv.waitKey(0)
+quit()
 
 maxbrightness = -1.0
 minbrightness = 10250.0

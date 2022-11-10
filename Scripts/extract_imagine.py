@@ -162,12 +162,6 @@ cul = get_color(aux)
 
 cv.imwrite("Assets\\Objects\\rez.png".format(image_number), blanc)
 
-
-
-# Show the output image
-cv.imshow('Output', out)
-cv.waitKey(0)
-cv.destroyAllWindows()
 ################################################################################
 for c in contours:
     x,y,w,h = cv.boundingRect(c)
@@ -182,7 +176,7 @@ for c in contours:
 
 
     #creere imagnie cu numar
-    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+    im = Image.open("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)))
     adaugare_numar(im, image_number)
     image_number += 1
 

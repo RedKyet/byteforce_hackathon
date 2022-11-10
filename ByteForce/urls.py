@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from Website.views import main, home, upload, contact, about, data
+from Website.views import main, home, upload, contact, about, data, dothemagic
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -28,5 +28,7 @@ urlpatterns = [
     path('contact', contact),
     
     path('about', about),
-    path('data', data)
+    path('data', data),
+
+    path('magic', dothemagic)
 ]

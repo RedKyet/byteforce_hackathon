@@ -36,7 +36,7 @@ def upload(request):
     #return JsonResponse({'foo':'bar'})
     uploaded_file = request.FILES['document']
     fs = FileSystemStorage()
-    path = 'users/'+str(request.session['id'])+'/cache.jpg'
+    path = 'users/'+str(request.session['id'])+'/cake.jpg'
     fs.delete(path)
     name = fs.save(path, uploaded_file)
     #Scripts\main.py
@@ -60,3 +60,9 @@ def data(request):
 def contact(request):
     
     return render(request, 'contact.html')
+#from 'Scripts\extract_imagine.py' import magic
+def dothemagic(request):
+    id=session.request['id']
+    return magic("Website//static//users//"+id)
+    
+    

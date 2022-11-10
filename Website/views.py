@@ -3,6 +3,13 @@ from django.core.files.storage import FileSystemStorage
 import json
 import os
 
+
+
+def home(request):
+    
+    return render(request, 'home.html')
+
+
 def main(request):
     import uuid
     import secrets
@@ -20,10 +27,6 @@ def main(request):
     print (uuid.uuid1())
     return render(request, 'main.html')
 
-def home(request):
-    
-    return render(request, 'home.html')
-
 def upload(request):
     print('dadada otelu e viata mea')
     uploaded_file = request.FILES['document']
@@ -33,3 +36,7 @@ def upload(request):
     name = fs.save(path, uploaded_file)
 
     return render(request, 'main.html')
+
+def contact(request):
+    
+    return render(request, 'contact.html')

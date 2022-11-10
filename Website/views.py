@@ -60,3 +60,9 @@ def data(request):
 def contact(request):
     
     return render(request, 'contact.html')
+from 'Scripts\extract_imagine.py' import magic
+def dothemagic(request):
+    id=session.request['id']
+    return magic("Website//static//users//"+id)
+    
+    

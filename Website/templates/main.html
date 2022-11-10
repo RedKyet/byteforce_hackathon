@@ -81,6 +81,13 @@
     document.getElementById('pozamare').src=imgurl
     console.log(data)
 })
+
+
+async function fetchMovies() {
+    const response = await fetch('/magic');
+    // waits until the request completes...
+    console.log(response);
+  }
     }
 </script>
 <iframe name="frame" style="display:none"></iframe>

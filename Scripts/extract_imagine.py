@@ -57,6 +57,25 @@ cnts = cv.findContours(betterholesimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 print(type(cnts))
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 image_number = 0
+
+#save min and max area image
+minar_img=min(cnts,key=lambda x:cv.contourArea(x))
+maxar_img=max(cnts,key=lambda x:cv.contourArea(x))
+x,y,w,h = cv.boundingRect(minar_img)
+element = img[y:y+h, x:x+w]
+cv.imwrite("Assets\\Objects\\element_min_area_{}.png".format(cv.contourArea(minar_img)), element)
+x,y,w,h = cv.boundingRect(maxar_img)
+element = img[y:y+h, x:x+w]
+cv.imwrite("Assets\\Objects\\element_max_area_{}.png".format(cv.contourArea(maxar_img)), element)
+#
+#
+#save min and max perim image
+
+#
+#
+#
+#
+
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
@@ -64,8 +83,9 @@ for c in cnts:
     #draw contour
     #cv.drawContours(img, [c], -1, (0,255,255), 1)
     
-    element = img[y:y+h, x:x+w]
-    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
+    element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
+
+    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), img)
     image_number += 1
 
 cv.imshow("grayimg", grayimg)

@@ -3,20 +3,24 @@
 {% block content %}
 
 <div class="text-center animate__animated animate__fadeIn"> 
-    <h1 style="font-size: 10.5rem; color: #8FE3CF"> Our Goal </h1>
+    <h1 style="font-size: 10.5rem; color: #f783a4"> Our Goal </h1>
 </div>
-<h1 class="text-center animate__animated animate__slideInLeft animate__delay-1s" style="font-size: 2rem; color: #8FE3CF"> The <span style="color: white">Byte</span><span style="color: #67C8FF">Force</span> team accepted your challenge </h1>
-<h1 class="text-center animate__animated animate__slideInRight animate__delay-2s" style="font-size: 2rem; color: #8FE3CF"> and delivered on its promise: </h1>
-<h1 class="text-center animate__animated animate__slideInLeft animate__delay-3s" style="font-size: 2rem; color: #8FE3CF"> We present to you.. </h1>
-<h1 class="text-center animate__animated animate__slideInRight animate__delay-4s" style="font-size: 2.5rem; color: #8FE3CF"> Zmeurica 3.14 </h1>
-<h1 class="text-center animate__animated animate__slideInLeft animate__delay-4s" style="font-size: 1.5rem; color: #8FE3CF"> by Durly, Lazăr, Maf, Teo and Rareș </h1>
+<h1 class="text-center animate__animated animate__slideInLeft animate__delay-0.5s" style="font-size: 2rem; color: #f783a4"> The <span style="color: white">Byte</span><span style="color: #67C8FF">Force</span> team accepted your challenge </h1>
+<h1 class="text-center animate__animated animate__slideInRight animate__delay-1s" style="font-size: 2rem; color: #f783a4"> and delivered on its promise: </h1>
+<h1 class="text-center animate__animated animate__slideInLeft animate__delay-2s" style="font-size: 2rem; color: #f783a4"> We present to you.. </h1>
+<h1 class="text-center animate__animated animate__slideInRight animate__delay-3s" style="font-size: 2.5rem; color: #f783a4"> Zmeurica 3.14 </h1>
+<h1 class="text-center animate__animated animate__slideInLeft animate__delay-3s" style="font-size: 1.5rem; color: #f783a4"> by Durly, Lazăr, Maf, Teo and Rareș </h1>
 
 {% endblock content %}
 
 {% block background %}
 body {  
-    background-image: url('static/home.jpg');
+    background-image: url('static/home.png');
     background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
     color: white 
     {% comment %} font-family: Arial; {% endcomment %}
 }

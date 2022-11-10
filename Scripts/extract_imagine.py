@@ -16,7 +16,7 @@ imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
 binarythresh = 240
 contrastthresh = 20
 epsilonarie = 5.0
-epsilonper = 5.0
+epsilonper = 1.0
 
 ##############################################################################################################
 
@@ -124,7 +124,6 @@ for i in range(len(contours)):
     currarie = cv.contourArea(contours[i])
     currper = cv.arcLength(contours[i], True)
     if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
-        print("i like to draw")
         cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
 
 cv.imshow("only max arie and min per", onlymaxarieminper)

@@ -3,10 +3,13 @@ from django.core.files.storage import FileSystemStorage
 import json
 import os
 
-def home(request):
+def main(request):
     
     return render(request, 'main.html')
 
+def home(request):
+    
+    return render(request, 'home.html')
 
 def upload(request):
     

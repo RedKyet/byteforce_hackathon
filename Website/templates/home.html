@@ -1,0 +1,25 @@
+{% extends '@base.html' %}
+
+{% block content %}
+<h3> Picture: <h3>
+
+<form action = "upload" method = "post" enctype = "multipart/form-data">
+
+    {% csrf_token %}  
+
+    <label for = "file">
+    <input type = "file" id = "file" accept = "image/png, image/jpg, image/jpeg" name = "document">
+
+    <label for = "submit">
+    <input type = "submit" id = "submit">
+
+</form>
+{% endblock content %}
+
+{% block background %}
+body {  
+background-image: url('Website/cache.jpg');
+background-repeat: no-repeat;
+{% comment %} font-family: Arial; {% endcomment %}
+}
+{% endblock background %}

@@ -23,7 +23,7 @@
         <link rel="shortcut icon" href="/static/logo.png" type="image/png" />
         <style>
             input{
-                {% comment %} color: #001329; {% endcomment %}
+            {% comment %} color: #001329; {% endcomment %}
             }
 
             a {
@@ -35,11 +35,8 @@
             color: #8FE3CF;
             }
 
-            body {  
-            background-color: #001329;
-            color: white;
-            {% comment %} font-family: Arial; {% endcomment %}
-            }
+            {% block background %}
+            {% endblock background %}
 
             ::-webkit-scrollbar {
             width: 10px;

@@ -28,7 +28,7 @@ urlpatterns = [
     path('contact', contact),
     
     path('about', about),
-    path('data', data)
+    path('data', data),
 
     path('magic', dothemagic)
 ]

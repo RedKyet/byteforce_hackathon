@@ -128,29 +128,28 @@ for i in range(len(contours)):
 
 ########################################################
 aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
-cul = get_color(aux)
 image_number=0
 cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
+
+blanc = np.zeros((1, 1, 3), np.uint8)
+cv.imwrite("Assets\\Objects\\rez.png",blanc)
+
 for c in cts_by_area:
     x,y,w,h = cv.boundingRect(c)
     element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
-    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
+    cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
 
 
     #creere imagnie cu numar
-    im = Image.open("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)))
+    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+
     adaugare_numar(im, image_number)
     image_number += 1
-
-
-    
-    #rez = Image.open("Assets\\Objects\\rez.png")
+    rez = Image.open("Assets\\Objects\\rez.png")
     
     #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
     #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
-    
-    #concatenare_orizontala(rez, im, cul).save("Assets\\Objects\\rez.png")
-   
+    concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
    # rez.save("Assets\\Objects\\rez.png")
     #creere imagine prin concatenare
 ########################################################
@@ -221,7 +220,7 @@ cv.drawContours(img,contours,0,thickness=5,color=[int(s) for s in img[0][0]])
 ################################################################################
 
 
-blanc = np.zeros((1, 1, 3), np.uint8)
+
 
 aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
 cul = get_color(aux)

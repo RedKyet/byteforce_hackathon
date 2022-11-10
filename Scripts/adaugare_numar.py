@@ -1,11 +1,37 @@
-from PIL import Image
+
+# import image module from pillow
+from PIL import Image, ImageFont, ImageDraw
+import os
+import fnmatch
 
 
-img = Image.open('Assets\\Greyscale test\\start.png')
+#numarat fisiere ROI 
+im1 = Image.open('ROI_0.png')
+ac = Image.new('L', (im1.width , im1.height))
+def adaugare_numar (a, num):
+    title_font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
+    title_text = num
+    image_editable = ImageDraw.Draw(a)
+    image_editable.text([15, 15], title_text, fill="red", font=title_font)
+    #ImageDraw.Draw.text(xy, text, fill=None, font=None, anchor=None, spacing=0, align=”left”)
+    im1.save("result.png")
 
-img_w, img_h = img.size
-background = Image.new('L', (1440, 900), (255, 255, 255, 255))
-bg_w, bg_h = background.size
-offset = ((bg_w - img_w) // 2, (bg_h - img_h) // 2)
-background.paste(img, offset)
-background.save('out.png')
+
+# open the image
+
+adaugare_numar(im1, "7")
+'''
+Image1 = Image.open('Assets\\Greyscale test\\start.png')
+
+# make a copy the image so that
+# the original image does not get affected
+Image1copy = Image1.copy()
+Image2 = Image.open('Assets\\Greyscale test\\rock.jpeg')
+Image2copy = Image2.copy()
+
+# paste image giving dimensions
+Image1copy.paste(Image2copy, (0, 0))
+
+# save the image
+Image1copy.save('rez.png')
+'''

@@ -10,7 +10,7 @@ original = image.copy()
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray, (5, 5), 0)
 thresh = cv2.threshold(
-  blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+  blur, 0, 255, cv2.THRESH_BINARY_INV )[1]
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
 dilate = cv2.dilate(thresh, kernel, iterations=1)
 
@@ -34,7 +34,7 @@ dst = cv2.inpaint(gray, dilate, 3, cv2.INPAINT_TELEA)
 cv2.imshow('image', gray)
 
 cv2.imshow('thresh', dilate)
-cv2.imshow('dilate', image)
+#cv2.imshow('dilate', image)
 cv2.waitKey(0)
 
 image = dst

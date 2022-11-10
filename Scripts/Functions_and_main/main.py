@@ -41,68 +41,6 @@ def set_img_path(path: str = "Assets\\Greyscale test\\start.png"):
 def obtinere_index(indeximg, line, column):
     return (((int(indeximg[line][column][2])) + ((int(indeximg[line][column][1])) << 8) + ((int(indeximg[line][column][0])) << 16)) - 1)
 
-""""""
-def max_arie_min_per():
-    objectareas = [0] * len(contours)
-    objectperimeters = [0] * len(contours)
-
-    maxarie = -1
-    for i in range(len(contours)):
-        if cv.contourArea(contours[i]) > maxarie:
-            maxarie = cv.contourArea(contours[i])
-        objectareas[i] = cv.contourArea(contours[i])
-
-    minper = 9999999
-    for i in range(len(contours)):
-        if cv.arcLength(contours[i], True) < minper:
-            minper = cv.arcLength(contours[i], True)
-        objectperimeters[i] = cv.arcLength(contours[i], True)
-
-    onlymaxarieminper = img.copy()
-
-    ok = False
-    for i in range(len(contours)):
-        currarie = cv.contourArea(contours[i])
-        currper = cv.arcLength(contours[i], True)
-        if maxarie-currarie <= epsilonarie and currper-minper <= epsilonper:
-            ok = True
-
-    if not ok:
-        for i in range(len(contours)):
-            currarie = cv.contourArea(contours[i])
-            currper = cv.arcLength(contours[i], True)
-            if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
-                cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
-                cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
-    else:
-        for i in range(len(contours)):
-            currarie = cv.contourArea(contours[i])
-            currper = cv.arcLength(contours[i], True)
-            if maxarie-currarie > epsilonarie or currper-minper > epsilonper:
-                cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
-                cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
-    
-    return onlymaxarieminper
-
-def min_max_brightness():
-    maxbrightness = -1.0
-    minbrightness = 10250.0
-    for i in range(len(contours)):
-        bright = intensities[i] / nrpixels[i]
-        if bright > maxbrightness:
-            maxbrightness = bright
-        if bright < minbrightness:
-            minbrightness = bright
-
-    onlybrightanddark = img.copy()
-
-    for i in range(len(contours)):
-        bright = intensities[i] / nrpixels[i]
-        if bright-minbrightness > epsilondark and maxbrightness-bright > epsilonbright:
-            cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
-            cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
-    return onlybrightanddark
-""""""
 
 def adaugare_numar (a, num):
 
@@ -190,6 +128,10 @@ for i in range(len(contours)):
     cb = (((i+1) >> 16) & 255)
     cv.drawContours(indexedimg, [contours[i]], -1, color=(cb, cg, cr), thickness=cv.FILLED)
 
+# define arrays with properties
+
+objectareas = [0] * len(contours)
+objectperimeters = [0] * len(contours)
 intensities = [0] * len(contours)
 nrpixels = [0] * len(contours)
 
@@ -200,7 +142,63 @@ for i in range(rows):
             nrpixels[ind] += 1
             intensities[ind] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
 
-# sort objects in decreasing order of areas
+
+maxarie = -1
+for i in range(len(contours)):
+    if cv.contourArea(contours[i]) > maxarie:
+        maxarie = cv.contourArea(contours[i])
+    objectareas[i] = cv.contourArea(contours[i])
+
+minper = 9999999
+for i in range(len(contours)):
+    if cv.arcLength(contours[i], True) < minper:
+        minper = cv.arcLength(contours[i], True)
+    objectperimeters[i] = cv.arcLength(contours[i], True)
+
+onlymaxarieminper = img.copy()
+
+ok = False
+for i in range(len(contours)):
+    currarie = cv.contourArea(contours[i])
+    currper = cv.arcLength(contours[i], True)
+    if maxarie-currarie <= epsilonarie and currper-minper <= epsilonper:
+        ok = True
+
+if not ok:
+    for i in range(len(contours)):
+        currarie = cv.contourArea(contours[i])
+        currper = cv.arcLength(contours[i], True)
+        if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
+else:
+    for i in range(len(contours)):
+        currarie = cv.contourArea(contours[i])
+        currper = cv.arcLength(contours[i], True)
+        if maxarie-currarie > epsilonarie or currper-minper > epsilonper:
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
+
+# object brightnesses
+
+maxbrightness = -1.0
+minbrightness = 10250.0
+for i in range(len(contours)):
+    bright = intensities[i] / nrpixels[i]
+    if bright > maxbrightness:
+        maxbrightness = bright
+    if bright < minbrightness:
+        minbrightness = bright
+
+onlybrightanddark = img.copy()
+
+for i in range(len(contours)):
+    bright = intensities[i] / nrpixels[i]
+    if bright-minbrightness > epsilondark and maxbrightness-bright > epsilonbright:
+        cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+        cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
+
+# make bg transparent
 
 alphaimg = cv.cvtColor(img, cv.COLOR_BGR2BGRA)
 for i in range(rows):
@@ -210,6 +208,8 @@ for i in range(rows):
             alphaimg[i][j][3] = 255
         else:
             alphaimg[i][j][3] = 0
+
+# sort objects in decreasing order of areas
 
 image_number=0
 blanc = np.zeros((1, 1, 3), np.uint8)
@@ -238,7 +238,6 @@ for c in range(len(contours)):
     concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
 
 
-cv.imshow("output", max_arie_min_per())
-#cv.imshow("output", min_max_brightness())
+cv.imshow("output", onlymaxarieminper)
 cv.waitKey(0)
 cv.destroyAllWindows()

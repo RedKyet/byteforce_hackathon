@@ -3,13 +3,9 @@ import math
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg') # fisierul care tine tot programul laolalta
 
-from adaugare_numar import adaugare_numar
-from concatenare import concatenare_orizontala
-from detect_culoare import get_color
-from obtinere_index import obtinere_index
-
-##############################################################################################################
+##########################################################################################################
 
 imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
 binarythresh = 245
@@ -19,9 +15,26 @@ epsilonbright = 0.005
 epsilondark = 0.005
 symmetrystep = 0.017
 
-##############################################################################################################
+##########################################################################################################
 
-aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
+def obtinere_index(indeximg, line, column):
+    return (((int(indeximg[line][column][2])) + ((int(indeximg[line][column][1])) << 8) + ((int(indeximg[line][column][0])) << 16)) - 1)
+
+def adaugare_numar (a, num):
+    draw = ImageDraw.Draw(a)
+    font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
+    text= str(num+1)
+    draw.text((5, 5), text= text, fill="red", font=font, align="right")
+    a.save("Assets\\Objects\\element_numar_{}.png".format(num))
+
+def concatenare_orizontala(im1, im2, color=(0, 0, 0)):
+    dst = Image.new('RGB', (im1.width + im2.width,
+                    max(im1.height, im2.height)), color)
+    dst.paste(im1, (0, 0))
+    dst.paste(im2, (im1.width, 0))
+    return dst
+
+##########################################################################################################
 
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
@@ -219,10 +232,19 @@ for c in range(len(contours)):
 
     objectprops[c]['filename'] = "Assets\\Objects\\element_{}.png".format(image_number)
 
+    binaryelement = invbinaryimg[y:y+h, x:x+w]
+
+    centroid = (objectcentroidrow[i]-y, objectcentroidcol[i]-x)
+    theta = 0
+    while theta < math.pi:
+        point = (centroid[0] + math.cos(theta), centroid[1] + math.sin(theta))
+        symmetryimg = invbinaryimg.copy()
+        cv.line(symmetryimg, centroid, point, (127, 127, 127), thickness=1, shift=15)
+        theta += symmetrystep
+
     adaugare_numar(im, image_number)
     image_number += 1
     rez = Image.open("Assets\\Objects\\rez.png")
-
     concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
 
 # get centroid
@@ -239,17 +261,7 @@ for i in range(len(contours)):
     objectcentroidrow[i] /= nrpixels[i]
     objectprops[i]['centroidrow'] = objectcentroidrow[i]
     objectprops[i]['centroidcol'] = objectcentroidcol[i]
-
-# get symmetry (hard)
-
-for i in range(len(contours)):
-    centroid = (objectcentroidrow[i], objectcentroidcol[i])
-    theta = 0
-    while theta < math.pi:
-        point = (centroid[0] + math.cos(theta), centroid[1] + math.sin(theta))
-        symmetryimg = invbinaryimg.copy()
-        cv.line(symmetryimg, centroid, point, (127, 127, 127), thickness=1, shift=15)
-        theta += symmetrystep
+    
 
 # print object properties
 

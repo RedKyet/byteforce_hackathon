@@ -1,8 +1,17 @@
-{% extends base.html %}
+{% extends '@base.html' %}
 
-<h1> Picture: <h1>
-<form action = 'upload' method = 'post' enctype = 'multipart/form-data'>
+{% block content %}
+<h3> Picture: <h3>
+
+<form action = "upload" method = "post" enctype = "multipart/form-data">
+
     {% csrf_token %}  
-    <input type = 'file' id = 'file' accept = 'image/png, image/jpg, image/jpeg' name = 'document'>
-    <input type = 'submit'>
+
+    <label for = "file">
+    <input type = "file" id = "file" accept = "image/png, image/jpg, image/jpeg" name = "document">
+
+    <label for = "submit">
+    <input type = "submit" id = "submit">
+
 </form>
+{% endblock content %}

@@ -300,7 +300,8 @@ for c in range(len(contours)):
                 area2 += partialsumcol[h-1][j]
             else:
                 area1 += partialsumcol[h-1][j]
-        if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh
+        if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh:
+            
         theta += symmetrystep
     
     # concatenare

@@ -7,8 +7,8 @@ import cv2 as cv
 
 #numarat fisiere ROI
 #  
-im1 = Image.open('ROI_0.png')
-ac = Image.new('L', (im1.width , im1.height))
+#im1 = Image.open('ROI_0.png')
+#ac = Image.new('L', (im1.width , im1.height))
 
 
 
@@ -18,7 +18,7 @@ def adaugare_numar (a, num):
 
     font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
 
-    text= str(num)
+    text= str(num+1)
 
     draw.text((5, 5), text= text, fill="red", font=font, align="right")
 

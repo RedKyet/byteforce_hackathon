@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 import json
 import os
-
+from django.http import JsonResponse
 
 
 def home(request):
@@ -32,14 +32,37 @@ def main(request):
 
 def upload(request):
     print('dadada otelu e viata mea')
+    print(request.POST)
+    #return JsonResponse({'foo':'bar'})
     uploaded_file = request.FILES['document']
     fs = FileSystemStorage()
     path = 'users/'+str(request.session['id'])+'/cache.jpg'
     fs.delete(path)
     name = fs.save(path, uploaded_file)
-
-    return render(request, 'main.html')
-
+    #Scripts\main.py
+    #return render(request, 'main.html')
+    
+    
+def data(request):
+    print('dadada otelu e viata mea')
+    dict={
+        'uid':request.session['id']
+    }
+    return JsonResponse(dict)
+    uploaded_file = request.FILES['document']
+    fs = FileSystemStorage()
+    path = 'users/'+str(request.session['id'])+'/cache.jpg'
+    fs.delete(path)
+    name = fs.save(path, uploaded_file)
+    #Scripts\main.py
+    #return render(request, 'main.html')
+    
 def contact(request):
     
     return render(request, 'contact.html')
+from 'Scripts\extract_imagine.py' import magic
+def dothemagic(request):
+    id=session.request['id']
+    return magic("Website//static//users//"+id)
+    
+    

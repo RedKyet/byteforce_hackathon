@@ -1,31 +1,57 @@
 import cv2 as cv
 import math
+import time
+import os
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
+def magic(url):
+    dict = {
+        
+    }
+    return dict
+"""from adaugare_numar import adaugare_numar
+from concatenare import concatenare_orizontala
+from detect_culoare import get_color"""
+# turn background to white
 
-aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg') # fisierul care tine tot programul laolalta
-
-##########################################################################################################
-
-imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
+bgbb = (0, 0, 0, 0)
+bgbbarea = -1
+bgcolor = (0, 0, 0)
+#epsilons
 binarythresh = 245
 epsilonarie = 5.0
 epsilonper = 1
 epsilonbright = 0.005
 epsilondark = 0.005
-symmetrystep = 0.017
-symmetrythresh = 0.2
 
-##########################################################################################################
+#####Functions######
+imgname = "Assets\\Greyscale test\\start.png"
+img=cv.imread(imgname, cv.IMREAD_COLOR)
+rows, cols, _ = img.shape
+
+def get_img():
+    global img
+    return img
+
+def set_img_path(path: str = "Assets\\Greyscale test\\start.png"):
+    global img
+    imgname=path
+    img = cv.imread(imgname, cv.IMREAD_COLOR)
 
 def obtinere_index(indeximg, line, column):
     return (((int(indeximg[line][column][2])) + ((int(indeximg[line][column][1])) << 8) + ((int(indeximg[line][column][0])) << 16)) - 1)
 
+
 def adaugare_numar (a, num):
+
     draw = ImageDraw.Draw(a)
+
     font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
+
     text= str(num+1)
+
     draw.text((5, 5), text= text, fill="red", font=font, align="right")
+
     a.save("Assets\\Objects\\element_numar_{}.png".format(num))
 
 def concatenare_orizontala(im1, im2, color=(0, 0, 0)):
@@ -35,16 +61,8 @@ def concatenare_orizontala(im1, im2, color=(0, 0, 0)):
     dst.paste(im2, (im1.width, 0))
     return dst
 
-##########################################################################################################
+##################
 
-img = cv.imread(imgname, cv.IMREAD_COLOR)
-rows, cols, _ = img.shape
-
-# turn background to white
-
-bgbb = (0, 0, 0, 0)
-bgbbarea = -1
-bgcolor = (0, 0, 0)
 
 wbimg = img.copy()
 rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=5, upDiff=5)[3]
@@ -110,18 +128,12 @@ for i in range(len(contours)):
     cb = (((i+1) >> 16) & 255)
     cv.drawContours(indexedimg, [contours[i]], -1, color=(cb, cg, cr), thickness=cv.FILLED)
 
-# make lists with object properties
+# define arrays with properties
 
-objectprops = [{} for i in range(len(contours))]
-
-intensities = [0 for i in range(len(contours))]
-nrpixels = [0 for i in range(len(contours))]
-objectareas = [0 for i in range(len(contours))]
-objectperimeters = [0 for i in range(len(contours))]
-objectcentroidrow = [0 for i in range(len(contours))]
-objectcentroidcol = [0 for i in range(len(contours))]
-
-# calculate object pixel number and intensities (RSUM + BSUM + GSUM)
+objectareas = [0] * len(contours)
+objectperimeters = [0] * len(contours)
+intensities = [0] * len(contours)
+nrpixels = [0] * len(contours)
 
 for i in range(rows):
     for j in range(cols):
@@ -130,18 +142,6 @@ for i in range(rows):
             nrpixels[ind] += 1
             intensities[ind] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
 
-# generate image with transparent background
-
-alphaimg = cv.cvtColor(img, cv.COLOR_BGR2BGRA)
-for i in range(rows):
-    for j in range(cols):
-        ind = obtinere_index(indexedimg, i, j)
-        if ind >= 0:
-            alphaimg[i][j][3] = 255
-        else:
-            alphaimg[i][j][3] = 0
-
-# keep max area and min perimeter objects
 
 maxarie = -1
 for i in range(len(contours)):
@@ -179,7 +179,7 @@ else:
             cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
             cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
 
-# keep max and min brightness
+# object brightnesses
 
 maxbrightness = -1.0
 minbrightness = 10250.0
@@ -198,41 +198,24 @@ for i in range(len(contours)):
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
 
-# update dictionary
+# make bg transparent
 
-for i in range(len(contours)):
-    objectprops[i]['intensities'] = intensities[i]
-    objectprops[i]['nrpixels'] = nrpixels[i]
-    objectprops[i]['area'] = objectareas[i]
-    objectprops[i]['perimeter'] = objectperimeters[i]
-    objectprops[i]['brightness'] = intensities[i]/nrpixels[i]
-
-# centroid calculation
-
+alphaimg = cv.cvtColor(img, cv.COLOR_BGR2BGRA)
 for i in range(rows):
     for j in range(cols):
         ind = obtinere_index(indexedimg, i, j)
         if ind >= 0:
-            objectcentroidcol[ind] += j
-            objectcentroidrow[ind] += i
+            alphaimg[i][j][3] = 255
+        else:
+            alphaimg[i][j][3] = 0
 
-for i in range(len(contours)):
-    objectcentroidcol[i] /= nrpixels[i]
-    objectcentroidrow[i] /= nrpixels[i]
-    objectprops[i]['centroidrow'] = objectcentroidrow[i]
-    objectprops[i]['centroidcol'] = objectcentroidcol[i]
-    
-
-# sort objects in decreasing order of areas AND calculate symmetry
+# sort objects in decreasing order of areas
 
 image_number=0
 blanc = np.zeros((1, 1, 3), np.uint8)
-cv.imwrite("Assets\\Objects\\rez.png", blanc)
+cv.imwrite("Assets\\Objects\\rez.png",blanc)
 
 for c in range(len(contours)):
-
-    # creare imagine cu numar
-
     x, y, w, h = cv.boundingRect(contours[c])
     element = alphaimg[y:y+h, x:x+w]
 
@@ -244,94 +227,17 @@ for c in range(len(contours)):
                 element[i][j][0] = bgcolor[0]
                 element[i][j][1] = bgcolor[1]
                 element[i][j][2] = bgcolor[2]
-    
-    objectprops[c]['boundingbox'] = [y, x, y+h-1, x+w-1]
 
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
     im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
 
-    objectprops[c]['filename'] = "Assets\\Objects\\element_{}.png".format(image_number)
-
-    # calculare simetrie
-
-    binaryelement = invbinaryimg[y:y+h, x:x+w]
-    for i in range(h):
-        for j in range(w):
-            ind = obtinere_index(indexedimg, y+i, x+j)
-            if ind is not c:
-                binaryelement[i][j] = 0
-
-    centroid = (objectcentroidrow[c]-y, objectcentroidcol[c]-x)
-    partialsumrow = [[0 for j in range(cols)] for i in range(rows)]
-    partialsumcol = [[0 for j in range(cols)] for i in range(rows)]
-
-    for i in range(h):
-        j = 0
-        if binaryelement[i][j] == 255:
-            partialsumrow[i][j] = 1
-        for j in range(1, w):
-            partialsumrow[i][j] = partialsumrow[i][j-1]
-            if binaryelement[i][j] == 255:
-                partialsumrow[i][j] += 1
-    
-    for j in range(w):
-        i = 0
-        if binaryelement[i][j] == 255:
-            partialsumcol[i][j] = 1
-        for i in range(1, h):
-            partialsumcol[i][j] = partialsumcol[i-1][j]
-            if binaryelement[i][j] == 255:
-                partialsumcol[i][j] += 1
-
-    theta = 0
-    while theta < math.pi:
-        m = math.tan(theta)
-        # y = m * (x - centroid[1]) + centroid[0]
-        # y - centroid[0] = m * (x - centroid[1])
-        # (y - centroid[0]) / m = x - centroid[1]
-        # x = (y - centroid[0]) / m + centroid[1]
-        area1 = 0
-        area2 = 0
-        if w <= h:
-            for j in range(w):
-                i = int(m * (j - centroid[1]) + centroid[0])
-                if i >= 0 and i < h:
-                    if i > 0:
-                        area1 += partialsumcol[i-1][j]
-                    if i < h-1:
-                        area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
-                elif i < 0:
-                    area2 += partialsumcol[h-1][j]
-                else:
-                    area1 += partialsumcol[h-1][j]
-        else:
-            for i in range(h):
-                j = int((i - centroid[0]) / m + centroid[1])
-                if j >= 0 and j < w:
-                    if j > 0:
-                        area1 += partialsumrow[i][j-1]
-                    if j < w-1:
-                        area2 += (partialsumrow[i][w-1] - partialsumrow[i][j])
-                elif j < 0:
-                    area2 += partialsumrow[i][w-1]
-                else:
-                    area1 += partialsumrow[i][w-1]
-
-        #if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh:
-        theta += symmetrystep
-    
-    # concatenare
-
     adaugare_numar(im, image_number)
     image_number += 1
     rez = Image.open("Assets\\Objects\\rez.png")
+
     concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
 
-# print object properties
 
-for i in range(len(contours)):
-    print(objectprops[i])
-
-# show images
-
+cv.imshow("output", onlymaxarieminper)
+cv.waitKey(0)
 cv.destroyAllWindows()

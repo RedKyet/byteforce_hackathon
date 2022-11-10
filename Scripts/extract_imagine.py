@@ -70,7 +70,14 @@ cv.imwrite("Assets\\Objects\\element_max_area_{}.png".format(cv.contourArea(maxa
 #
 #
 #save min and max perim image
-
+minper_img=min(cnts,key=lambda x:cv.arcLength(x, True))
+maxper_img=max(cnts,key=lambda x:cv.arcLength(x, True))
+x,y,w,h = cv.boundingRect(minper_img)
+element = img[y:y+h, x:x+w]
+cv.imwrite("Assets\\Objects\\element_min_perim_{}.png".format(cv.arcLength(minper_img, True)), element)
+x,y,w,h = cv.boundingRect(maxper_img)
+element = img[y:y+h, x:x+w]
+cv.imwrite("Assets\\Objects\\element_max_perim_{}.png".format(cv.arcLength(maxper_img, True)), element)
 #
 #
 #

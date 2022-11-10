@@ -29,12 +29,12 @@ def contrastarrFill(i, j):
     for ind in range(1, 5):
         
 
-
+'''
 for i in range(rows):
     for j in range(cols):
         if contrastarr[i][j] == 0:
             cnt += 1
-
+'''
 
 
 grayimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)

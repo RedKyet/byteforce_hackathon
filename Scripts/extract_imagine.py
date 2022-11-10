@@ -15,6 +15,28 @@ contrastthresh = 40
 
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
+
+# algoritmul lui lee pt gasirea fundalului
+
+contrastarr = [[0 for j in range(cols)] for i in range(rows)]
+
+cnt = 0
+dx = [0, -1, 0, 1, 0]
+dy = [0, 0, 1, 0, -1]
+
+def contrastarrFill(i, j):
+    contrastarr[i][j] = cnt
+    for ind in range(1, 5):
+        
+
+
+for i in range(rows):
+    for j in range(cols):
+        if contrastarr[i][j] == 0:
+            cnt += 1
+
+
+
 grayimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
 
@@ -22,7 +44,7 @@ contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
 contoursbinaryimg = invbinaryimg.copy()
 cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
 
-contrastarr = [[0 for j in range(cols)] for i in range(rows)]
+
 '''
 for i in range(rows):
     for j in range(cols):

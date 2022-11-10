@@ -92,27 +92,17 @@ for i in range(len(contours)):
     cb = (((i+1) >> 16) & 255)
     cv.drawContours(indexedimg, [contours[i]], -1, color=(cb, cg, cr), thickness=cv.FILLED)
 
-# make inner holes more accurate (optional)
-'''
-betterholesimg = invbinaryimg.copy()
+# generate image with transparent background
 
+alphaimg = cv.cvtColor(img, cv.COLOR_BGR2BGRA)
 for i in range(rows):
     for j in range(cols):
-        if invbinaryimg[i][j] == 255 and contoursbinaryimg[i][j] == 255:
-            cnt = 0
-            if i > 0 and invbinaryimg[i-1][j] == 0:
-                cnt += 1
-            if i < rows-1 and invbinaryimg[i+1][j] == 0:
-                cnt += 1
-            if j > 0 and invbinaryimg[i][j-1] == 0:
-                cnt += 1
-            if j < cols-1 and invbinaryimg[i][j+1] == 0:
-                cnt += 1
-            if cnt > 0:
-                betterholesimg[i][j] = 0
+        ind = obtinere_index(indexedimg, i, j)
+        if ind >= 0:
+            alphaimg[i][j][3] = 255
+        else:
+            alphaimg[i][j][3] = 0
 
-invbinaryimg = betterholesimg.copy()
-'''
 cv.waitKey(0)
 
 # keep max area and min perimeter objects

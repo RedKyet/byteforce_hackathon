@@ -141,7 +141,34 @@ for i in range(len(contours)):
         cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
         cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
         
-cv.imshow("only max arie and min per", onlymaxarieminper)
+
+########################################################
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
+image_number=0
+cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
+
+blanc = np.zeros((1, 1, 3), np.uint8)
+cv.imwrite("Assets\\Objects\\rez.png",blanc)
+
+for c in cts_by_area:
+    x,y,w,h = cv.boundingRect(c)
+    element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
+    cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
+
+
+    #creere imagnie cu numar
+    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+
+    adaugare_numar(im, image_number)
+    image_number += 1
+    rez = Image.open("Assets\\Objects\\rez.png")
+    
+    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
+    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
+    concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
+   # rez.save("Assets\\Objects\\rez.png")
+    #creere imagine prin concatenare
+########################################################
 
 # keep min brightness and max brightness
 
@@ -172,59 +199,7 @@ for i in range(len(contours)):
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
 
-
+cv.imshow("only max arie and min per", onlymaxarieminper)
 cv.imshow("only bright and dark", onlybrightanddark)
 cv.waitKey(0)
 cv.destroyAllWindows()
-
-quit()
-
-blanc = np.zeros((1, 1, 3), np.uint8)
-
-aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
-cul = get_color(aux)
-
-cv.imwrite("Assets\\Objects\\rez.png".format(image_number), blanc)
-
-################################################################################
-for c in contours:
-    x,y,w,h = cv.boundingRect(c)
-    #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
-    
-    #draw contour
-    #cv.drawContours(img, [c], -1, (0,255,255), 1)
-    
-    element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
-
-    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
-
-
-    #creere imagnie cu numar
-    im = Image.open("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)))
-    adaugare_numar(im, image_number)
-    image_number += 1
-
-
-    
-    rez = Image.open("Assets\\Objects\\rez.png")
-    
-    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
-    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
-    concatenare_orizontala(rez, im, cul).save("Assets\\Objects\\rez.png")
-   # rez.save("Assets\\Objects\\rez.png")
-    #creere imagine prin concatenare
-    
-    
-cv.imshow("img", img)
-
-cv.waitKey(0)
-cv.destroyAllWindows()
-
-'''
-COLT DE DAT CU MNJMNJMJNNHMJ IN TASTATURA
-
-
-
-HYJUNHJMNHJHJNMNHJMNHJNHJMNHJNMNHJMJ.,,M,M
-
-'''

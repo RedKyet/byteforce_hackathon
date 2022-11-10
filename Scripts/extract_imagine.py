@@ -8,6 +8,7 @@ from PIL import Image, ImageFont, ImageDraw
 
 from adaugare_numar import adaugare_numar
 from concatenare import concatenare_orizontala
+from detect_culoare import get_color
 
 ##############################################################################################################
 
@@ -62,9 +63,14 @@ cnts = cv.findContours(betterholesimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 image_number = 0
 
-blanc = np.zeros((2, 2, 3), np.uint8)
+blanc = np.zeros((1, 1, 3), np.uint8)
+
+aux = Image.open('Assets\\Greyscale test\\start.png')
+cul = get_color(aux)
 
 cv.imwrite("Assets\\Objects\\rez.png".format(image_number), blanc)
+
+
 
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
@@ -84,7 +90,7 @@ for c in cnts:
     
     #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
     #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
-    concatenare_orizontala(rez, im, (0, 0, 0)).save("Assets\\Objects\\rez.png")
+    concatenare_orizontala(rez, im, cul).save("Assets\\Objects\\rez.png")
    # rez.save("Assets\\Objects\\rez.png")
     #creere imagine prin concatenare
     

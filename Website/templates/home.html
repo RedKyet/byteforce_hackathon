@@ -18,7 +18,7 @@
 body {  
 
     background-color: #001329;
-
+    document.documentElement.style.setProperty('--animate-duration', '.5s');
     {% comment %} font-family: Arial; {% endcomment %}
 }
 
@@ -32,7 +32,6 @@ body {
     0% { opacity: 0; }
     100% { opacity: 1; }
 } {% endcomment %}
-
 {% endblock background %}
 
 {% block nav1 %}

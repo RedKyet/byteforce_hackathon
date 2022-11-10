@@ -21,7 +21,7 @@
         </label>
     </form>  {% endcomment %}
 
-<form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full" target="frame">
+<form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full">
     {% csrf_token %}  
     <label class="fil flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
         <input type="file" name = "document" class="w-full h-64" accept = "image/png, image/jpg, image/jpeg" multiple style="position:absolute;opacity: 0;outline: 0;border: 1px solid red;">
@@ -48,10 +48,27 @@
         //}
         // el.removeClass('focus');
         //el.html(f[0].name + '<br>' +'<span class="sml">' +'type: ' + f[0].type + ', ' +Math.round(f[0].size / 1024) + ' KB</span>');
-        document.getElementById("f").submit()
+        //document.getElementById("f").submit()
+
+        
+
+    var form = document.getElementById("f");
+    //form.preventDefault(); // avoid to execute the actual submit of the form.
+    var actionUrl = "upload";
+    var formData = $(this).serialize();
+    $.ajax({
+        type: "POST",
+        url: actionUrl,
+        data: {'dada': formData, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // serializes the form's elements.
+        success: function(data)
+        {
+          console.log(data); // show response from the php script.
+        }
+    });
+
     });
 </script>
-<iframe name="frame" style="display:none"></iframe>
+{% comment %} <iframe name="frame" style="display:block"></iframe> {% endcomment %}
 {% endblock content %}
 
 {% block background %}

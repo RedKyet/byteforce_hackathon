@@ -103,8 +103,6 @@ for i in range(rows):
         else:
             alphaimg[i][j][3] = 0
 
-cv.waitKey(0)
-
 # keep max area and min perimeter objects
 
 objectareas = [0] * len(contours)

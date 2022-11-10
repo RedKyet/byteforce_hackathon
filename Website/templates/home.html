@@ -1,0 +1,39 @@
+{% extends '@base.html' %}
+
+{% block content %}
+
+<div class="h-64">
+    <div class="text-center animate__animated animate__fadeIn" style=""> 
+        <h1 style="font-size: 5rem; color: white"> ACEE HACKATHON 2022 </h1>
+    </div>
+    <h1 class="text-center animate__animated animate__slideInLeft animate__delay-1s" style="font-size: 2rem; color: white"> The <span style="color: white">Byte</span><span style="color: #67C8FF">Force</span> team accepted your challenge </h1>
+    <h1 class="text-center animate__animated animate__slideInRight animate__delay-2s" style="font-size: 2rem; color: white"> and delivered on its promise: </h1>
+    <h1 class="text-center animate__animated animate__slideInLeft animate__delay-3s" style="font-size: 2rem; color: white"> We present to you.. </h1>
+    <h1 class="text-center animate__animated animate__slideInRight animate__delay-4s" style="font-size: 2.5rem; color: white"> Zmeurica 3.14 </h1>
+    <h1 class="text-center animate__animated animate__slideInLeft animate__delay-4s" style="font-size: 1.5rem; color: white"> by Durly, Lazăr, Maf, Teo and Rareș </h1>
+</div>
+{% endblock content %}
+
+{% block background %}
+body {  
+
+    background-color: #001329;
+    document.documentElement.style.setProperty('--animate-duration', '.5s');
+    {% comment %} font-family: Arial; {% endcomment %}
+}
+
+
+{% comment %} .fade-in-text {
+    font-size: 150px;
+    animation: fadeIn 3s;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+} {% endcomment %}
+{% endblock background %}
+
+{% block nav1 %}
+<a href="#" class="block py-2 pr-4 pl-3 text-white bg-sky-400 rounded md:bg-transparent md:text-sky-400 md:p-0 dark:text-white" aria-current="page">Home</a>
+{% endblock nav1 %}

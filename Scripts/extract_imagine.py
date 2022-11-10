@@ -97,8 +97,18 @@ for i in range(len(contours)):
     cb = (((i+1) >> 16) & 255)
     cv.drawContours(indexedimg, [contours[i]], -1, color=(cb, cg, cr), thickness=cv.FILLED)
 
-intensities = [0] * len(contours)
-nrpixels = [0] * len(contours)
+# make lists with object properties
+
+objectprops = [{} for i in range(len(contours))]
+
+intensities = [0 for i in range(len(contours))]
+nrpixels = [0 for i in range(len(contours))]
+objectareas = [0 for i in range(len(contours))]
+objectperimeters = [0 for i in range(len(contours))]
+objectcentroidrow = [0 for i in range(len(contours))]
+objectcentroidcol = [0 for i in range(len(contours))]
+
+# calculate object pixel number and intensities (RSUM + BSUM + GSUM)
 
 for i in range(rows):
     for j in range(cols):
@@ -119,9 +129,6 @@ for i in range(rows):
             alphaimg[i][j][3] = 0
 
 # keep max area and min perimeter objects
-
-objectareas = [0] * len(contours)
-objectperimeters = [0] * len(contours)
 
 maxarie = -1
 for i in range(len(contours)):
@@ -178,11 +185,20 @@ for i in range(len(contours)):
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
 
+# update dictionary
+
+for i in range(len(contours)):
+    objectprops[i]['intensities'] = intensities[i]
+    objectprops[i]['nrpixels'] = nrpixels[i]
+    objectprops[i]['area'] = objectareas[i]
+    objectprops[i]['perimeter'] = objectperimeters[i]
+    objectprops[i]['brightness'] = intensities[i]/nrpixels[i]
+
 # sort objects in decreasing order of areas
 
 image_number=0
 blanc = np.zeros((1, 1, 3), np.uint8)
-cv.imwrite("Assets\\Objects\\rez.png",blanc)
+cv.imwrite("Assets\\Objects\\rez.png", blanc)
 
 for c in range(len(contours)):
     x, y, w, h = cv.boundingRect(contours[c])
@@ -196,9 +212,13 @@ for c in range(len(contours)):
                 element[i][j][0] = bgcolor[0]
                 element[i][j][1] = bgcolor[1]
                 element[i][j][2] = bgcolor[2]
+    
+    objectprops[c]['boundingbox'] = [y, x, y+h-1, x+w-1]
 
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
     im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+
+    objectprops[c]['filename'] = "Assets\\Objects\\element_{}.png".format(image_number)
 
     adaugare_numar(im, image_number)
     image_number += 1
@@ -206,12 +226,25 @@ for c in range(len(contours)):
 
     concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
 
-# show images
+# get centroid
+
+for i in range(rows):
+    for j in range(cols):
+        ind = obtinere_index(indexedimg, i, j)
+        if ind >= 0:
+            objectcentroidcol[ind] += j
+            objectcentroidrow[ind] += i
 
 for i in range(len(contours)):
-    print(objectareas[i])
+    objectcentroidcol[i] /= nrpixels[i]
+    objectcentroidrow[i] /= nrpixels[i]
+    objectprops[i]['centroidrow'] = objectcentroidrow[i]
+    objectprops[i]['centroidcol'] = objectcentroidcol[i]
 
-cv.imshow("only max arie and min per", onlymaxarieminper)
-cv.imshow("only bright and dark", onlybrightanddark)
-cv.waitKey(0)
+# get symmetry (hard)
+
+
+
+# show images
+
 cv.destroyAllWindows()

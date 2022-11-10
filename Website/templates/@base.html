@@ -55,48 +55,8 @@
 
         </style>
 
-         <nav class="navbar navbar-expand-lg" style="background-color: #212121">
-            <div class="container-fluid">
-                <img onclick="location.href = '/';" id="logo2" src="/static/TGT_Logo.png" alt="TGT" height="40vh;">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/characters/" style="color: white;">             Characters</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/builds/" style="color: white; background-color: #141414; border-radius: 0.5rem">Builds</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/teambuilder/" style="color: white;"><span class="badge text-bg-warning">NEW</span> Teambuilder</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white;">
-                                Sort Builds
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDropdown" style="background-color: #212121; color:white;">
-                                <li><a class="dropdown-item" href="/builds/role/">by Role</a></li>
-                                <li><a class="dropdown-item" href="/builds/element/">by Element</a></li>
-                                <li><a class="dropdown-item" href="/builds/rating_Main_DPSs/">by Rating (Main DPS)</a></li>
-                                <li><a class="dropdown-item" href="/builds/rating_Supports/">by Rating (Support)</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/builds">by Character Release Date (Default)</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="d-flex" role="search" autocomplete="off">
-                    <input class="form-control me-2" id = "s" type="search" placeholder="Search" aria-label="Search" style="background-color: #212121; color: white;">
-                    </form>
-                </div>
-            </div>
-        </nav> 
-
-
     </head>
     <body>
-        <h1>git go brrrrrrrrrrrrrr</h1>
         {% block content %}
         {% endblock content %}
     </body>

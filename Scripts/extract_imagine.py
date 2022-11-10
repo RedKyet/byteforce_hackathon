@@ -142,7 +142,7 @@ cv.imwrite("Assets\\Objects\\rez.png",blanc)
 for c in cts_by_area:
     x,y,w,h = cv.boundingRect(c)
     
-    element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
+    element = alphaimg[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
 
 

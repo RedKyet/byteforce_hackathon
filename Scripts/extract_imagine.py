@@ -18,6 +18,8 @@ binarythresh = 240
 contrastthresh = 20
 epsilonarie = 5.0
 epsilonper = 1.0
+epsilonbright = 0.00
+epsilondark = 0.00
 
 ##############################################################################################################
 
@@ -74,7 +76,7 @@ wbimg = finalwbimg.copy()
 # get object contours
 
 grayimg = cv.cvtColor(wbimg, cv.COLOR_BGR2GRAY)
-invbinaryimg = cv.threshold(grayimg, binarythresh, 255,cv.THRESH_BINARY_INV)[1]
+invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
 
 contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
 contoursbinaryimg = invbinaryimg.copy()
@@ -113,7 +115,7 @@ invbinaryimg = betterholesimg.copy()
 '''
 cv.waitKey(0)
 
-#save min and max area image
+# keep max area and min perimeter objects
 
 objectareas = [0] * len(contours)
 objectperimeters = [0] * len(contours)
@@ -137,41 +139,12 @@ for i in range(len(contours)):
     currper = cv.arcLength(contours[i], True)
     if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
         cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
-
-########################################################
-aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
-cul = get_color(aux)
-image_number=0
-cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
-for c in cts_by_area:
-    x,y,w,h = cv.boundingRect(c)
-    element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
-    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
-
-
-    #creere imagnie cu numar
-    im = Image.open("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)))
-    adaugare_numar(im, image_number)
-    image_number += 1
-
-
-    
-    #rez = Image.open("Assets\\Objects\\rez.png")
-    
-    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
-    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
-    
-    #concatenare_orizontala(rez, im, cul).save("Assets\\Objects\\rez.png")
-   
-   # rez.save("Assets\\Objects\\rez.png")
-    #creere imagine prin concatenare
-########################################################
-
+        cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
+        
 cv.imshow("only max arie and min per", onlymaxarieminper)
-cv.imshow("invbinaryimg", invbinaryimg)
-cv.waitKey(0)
 
-#save min and max brightness image
+# keep min brightness and max brightness
+
 intensities = [0] * len(contours)
 nrpixels = [0] * len(contours)
 
@@ -182,27 +155,29 @@ for i in range(rows):
             intensities[aux] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
             nrpixels[aux] += 1
 
+maxbrightness = -1.0
+minbrightness = 10250.0
+for i in range(len(contours)):
+    bright = intensities[i] / nrpixels[i]
+    if bright > maxbrightness:
+        maxbrightness = bright
+    if bright < minbrightness:
+        minbrightness = bright
+
+onlybrightanddark = img.copy()
+
+for i in range(len(contours)):
+    bright = intensities[i] / nrpixels[i]
+    if bright-minbrightness > epsilondark and maxbrightness-bright > epsilonbright:
+        cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+        cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
 
 
-for i in range(len(contours)-1):
-    for j in range(i+1, len(contours)):
-        if sum(sum(intensities[i])/len(intensities[i])) > sum(sum(intensities[j])/len(intensities[j])):
-            aux = intensities[i]
-            intensities[i] = intensities[j]
-            intensities[j] = aux
-            aux2 = intensarray[i]
-            intensarray[i] = intensarray[j]
-            intensarray[j] = aux2
+cv.imshow("only bright and dark", onlybrightanddark)
+cv.waitKey(0)
+cv.destroyAllWindows()
 
-i = intensarray[0]
-j = intensarray[len(contours)-1]
-
-cv.imshow("img1", img)
-
-print(sum(sum(intensities[i]))/len(intensities[i]))
-print(sum(sum(intensities[j]))/len(intensities[j]))
-cv.drawContours(img, [contours[i]], -1, color=(255,0,0), thickness=-1)
-cv.drawContours(img, [contours[j]], -1, color=(0,255,0), thickness=-1)
+quit()
 
 blanc = np.zeros((1, 1, 3), np.uint8)
 

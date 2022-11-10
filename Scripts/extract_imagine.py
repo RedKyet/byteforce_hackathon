@@ -14,15 +14,15 @@ from obtinere_index import obtinere_index
 ##############################################################################################################
 
 imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
-binarythresh = 240
-contrastthresh = 20
+binarythresh = 245
 epsilonarie = 5.0
-epsilonper = 1.0
-epsilonbright = 0.00
-epsilondark = 0.00
+epsilonper = 0.5
+epsilonbright = 0.005
+epsilondark = 0.005
 
 ##############################################################################################################
 
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
 
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
@@ -82,6 +82,11 @@ contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
 contoursbinaryimg = invbinaryimg.copy()
 cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
 
+# sort contours by area in decreasing order
+
+contours = list(contours)
+contours.sort(key=lambda c:cv.contourArea(c), reverse=True)
+
 # give indexes to objects
 
 indexedimg = np.zeros((rows, cols, 3), np.uint8)
@@ -91,6 +96,16 @@ for i in range(len(contours)):
     cg = (((i+1) >> 8) & 255)
     cb = (((i+1) >> 16) & 255)
     cv.drawContours(indexedimg, [contours[i]], -1, color=(cb, cg, cr), thickness=cv.FILLED)
+
+intensities = [0] * len(contours)
+nrpixels = [0] * len(contours)
+
+for i in range(rows):
+    for j in range(cols):
+        ind = obtinere_index(indexedimg, i, j)
+        if ind >= 0:
+            nrpixels[ind] += 1
+            intensities[ind] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
 
 # generate image with transparent background
 
@@ -122,51 +137,29 @@ for i in range(len(contours)):
 
 onlymaxarieminper = img.copy()
 
+ok = False
 for i in range(len(contours)):
     currarie = cv.contourArea(contours[i])
     currper = cv.arcLength(contours[i], True)
-    if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
-        cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
-        cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
-        
+    if maxarie-currarie <= epsilonarie and currper-minper <= epsilonper:
+        ok = True
 
-########################################################
-aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
-image_number=0
-cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
+if not ok:
+    for i in range(len(contours)):
+        currarie = cv.contourArea(contours[i])
+        currper = cv.arcLength(contours[i], True)
+        if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
+else:
+    for i in range(len(contours)):
+        currarie = cv.contourArea(contours[i])
+        currper = cv.arcLength(contours[i], True)
+        if maxarie-currarie > epsilonarie or currper-minper > epsilonper:
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+            cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=8)
 
-blanc = np.zeros((1, 1, 3), np.uint8)
-cv.imwrite("Assets\\Objects\\rez.png",blanc)
-
-
-for c in cts_by_area:
-    x,y,w,h = cv.boundingRect(c)
-    
-    element = alphaimg[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
-    cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
-
-
-    #creere imagnie cu numar
-    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
-
-    adaugare_numar(im, image_number)
-    image_number += 1
-    rez = Image.open("Assets\\Objects\\rez.png")
-    
-    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
-    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
-    concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
-   # rez.save("Assets\\Objects\\rez.png")
-    #creere imagine prin concatenare
-########################################################
-
-cv.imshow("only max arie and min per", onlymaxarieminper)
-cv.imshow("invbinaryimg", invbinaryimg)
-cv.imshow("img", img)
-print(type(invbinaryimg))
-print(type(img))
-cv.waitKey(0)
-quit()
+# keep max and min brightness
 
 maxbrightness = -1.0
 minbrightness = 10250.0
@@ -184,6 +177,39 @@ for i in range(len(contours)):
     if bright-minbrightness > epsilondark and maxbrightness-bright > epsilonbright:
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
         cv.drawContours(onlybrightanddark, [contours[i]], -1, color=bgcolor, thickness=8)
+
+# sort objects in decreasing order of areas
+
+image_number=0
+blanc = np.zeros((1, 1, 3), np.uint8)
+cv.imwrite("Assets\\Objects\\rez.png",blanc)
+
+for c in range(len(contours)):
+    x, y, w, h = cv.boundingRect(contours[c])
+    element = alphaimg[y:y+h, x:x+w]
+
+    for i in range(h):
+        for j in range(w):
+            ind = obtinere_index(indexedimg, y+i, x+j)
+            if ind is not c:
+                element[i][j][3] = 0
+                element[i][j][0] = bgcolor[0]
+                element[i][j][1] = bgcolor[1]
+                element[i][j][2] = bgcolor[2]
+
+    cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
+    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+
+    adaugare_numar(im, image_number)
+    image_number += 1
+    rez = Image.open("Assets\\Objects\\rez.png")
+
+    concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
+
+# show images
+
+for i in range(len(contours)):
+    print(objectareas[i])
 
 cv.imshow("only max arie and min per", onlymaxarieminper)
 cv.imshow("only bright and dark", onlybrightanddark)

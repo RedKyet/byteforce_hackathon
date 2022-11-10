@@ -16,7 +16,7 @@ from obtinere_index import obtinere_index
 imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
 binarythresh = 245
 epsilonarie = 5.0
-epsilonper = 0.5
+epsilonper = 1
 epsilonbright = 0.005
 epsilondark = 0.005
 

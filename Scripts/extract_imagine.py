@@ -54,11 +54,13 @@ for i in range(rows):
 
 #save images
 cnts = cv.findContours(betterholesimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+print(type(cnts))
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 image_number = 0
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
+    cv.drawContours(img, [c], -1, (0,255,255), 1)
     element = img[y:y+h, x:x+w]
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
     image_number += 1

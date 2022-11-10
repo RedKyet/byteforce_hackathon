@@ -3,10 +3,16 @@ import math
 import time
 import os
 import numpy as np
+from PIL import Image, ImageFont, ImageDraw
+
+
+from adaugare_numar import adaugare_numar
+from concatenare import concatenare_orizontala
+from detect_culoare import get_color
 
 ##############################################################################################################
 
-imgname = "Assets\\Greyscale test\\fotografietest.png"
+imgname = "Assets\\Greyscale test\\Gaina4.jpg"
 binarythresh = 240
 contrastthresh = 40
 
@@ -120,6 +126,16 @@ cv.drawContours(img,cnts,0,thickness=cv.FILLED,color=[255,255,255])
 cv.drawContours(img,cnts,0,thickness=5,color=[int(s) for s in img[0][0]])
 ################################################################################
 
+
+blanc = np.zeros((1, 1, 3), np.uint8)
+
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
+cul = get_color(aux)
+
+cv.imwrite("Assets\\Objects\\rez.png".format(image_number), blanc)
+
+
+
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
@@ -130,9 +146,28 @@ for c in cnts:
     element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
 
     cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
+
+
+    #creere imagnie cu numar
+    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+    adaugare_numar(im, image_number)
     image_number += 1
 
+
+    
+    rez = Image.open("Assets\\Objects\\rez.png")
+    
+    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
+    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
+    concatenare_orizontala(rez, im, cul).save("Assets\\Objects\\rez.png")
+   # rez.save("Assets\\Objects\\rez.png")
+    #creere imagine prin concatenare
+    
+    
 cv.imshow("img", img)
+
+
+
 cv.imshow("grayimg", grayimg)
 cv.imshow("invbinaryimg", invbinaryimg)
 cv.imshow("betterholesimg", betterholesimg)

@@ -21,7 +21,7 @@
         </label>
     </form>  {% endcomment %}
 
-<form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full">
+<form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full" target="frame">
     {% csrf_token %}  
     <label class="fil flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
         <input type="file" name = "document" class="w-full h-64" accept = "image/png, image/jpg, image/jpeg" multiple style="position:absolute;opacity: 0;outline: 0;border: 1px solid red;">
@@ -35,6 +35,7 @@
             <!-- use multiple, even if it’s not allowed, to be able to show an info text -->
     </label>
 </form>
+<img id="pozamare" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" alt="Girl in a jacket" width="500" height="600">
 <script>
     $('input[type=file]').change(function() {
         //console.log(this.files);
@@ -48,27 +49,41 @@
         //}
         // el.removeClass('focus');
         //el.html(f[0].name + '<br>' +'<span class="sml">' +'type: ' + f[0].type + ', ' +Math.round(f[0].size / 1024) + ' KB</span>');
-        //document.getElementById("f").submit()
+        document.getElementById("f").submit()
 
         
 
-    var form = document.getElementById("f");
+    //var form = document.getElementById("f");
     //form.preventDefault(); // avoid to execute the actual submit of the form.
-    var actionUrl = "upload";
-    var formData = $(this).serialize();
-    $.ajax({
-        type: "POST",
-        url: actionUrl,
-        data: {'dada': formData, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // serializes the form's elements.
-        success: function(data)
-        {
-          console.log(data); // show response from the php script.
-        }
+    //var actionUrl = "upload";
+    //var file = this.files[0];
+    //var data = new FormData(document.getElementById("f"));
+    //console.log(data)
+    //var formData = new FormData(this);
+    //$.ajax({
+    //    type: "POST",
+    //    url: actionUrl,
+    //    data: {'dada': data, 'csrfmiddlewaretoken': '{{ csrf_token }}'}, // serializes the form's elements.
+    //    success: function(data)
+    //    {
+    //      console.log(data); // show response from the php script.
+    //    }
+    //});
+//
     });
-
-    });
+    setInterval(get, 1000)
+    function get(){
+        url = 'http://127.0.0.1:8000/data'
+    fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    imgurl=`http://127.0.0.1:8000/static/users/${data['uid']}/cache.jpg?`+ new Date().getTime();
+    document.getElementById('pozamare').src=imgurl
+    console.log(data)
+})
+    }
 </script>
-{% comment %} <iframe name="frame" style="display:block"></iframe> {% endcomment %}
+<iframe name="frame" style="display:none"></iframe>
 {% endblock content %}
 
 {% block background %}

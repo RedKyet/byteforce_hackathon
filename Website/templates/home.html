@@ -2,21 +2,27 @@
 
 {% block content %}
 
-<div class="animate__animated "> 
-    <h1> Fade-in Text </h1>
+<div class="text-center animate__animated animate__fadeIn"> 
+    <h1 style="font-size: 10.5rem; color: #8FE3CF"> Our Goal </h1>
 </div>
+<h1 class="text-center animate__animated animate__slideInLeft animate__delay-1s" style="font-size: 2rem; color: #8FE3CF"> The <span style="color: white">Byte</span><span style="color: #67C8FF">Force</span> team accepted your challenge </h1>
+<h1 class="text-center animate__animated animate__slideInRight animate__delay-2s" style="font-size: 2rem; color: #8FE3CF"> and delivered on its promise: </h1>
+<h1 class="text-center animate__animated animate__slideInLeft animate__delay-3s" style="font-size: 2rem; color: #8FE3CF"> We present to you.. </h1>
+<h1 class="text-center animate__animated animate__slideInRight animate__delay-4s" style="font-size: 2.5rem; color: #8FE3CF"> Zmeurica 3.14 </h1>
+<h1 class="text-center animate__animated animate__slideInLeft animate__delay-4s" style="font-size: 1.5rem; color: #8FE3CF"> by Durly, Lazăr, Maf, Teo and Rareș </h1>
 
 {% endblock content %}
 
 {% block background %}
 body {  
-background-image: url('static/home.jpg');
-background-repeat: no-repeat;
-color:  white
-{% comment %} font-family: Arial; {% endcomment %}
+    background-image: url('static/home.jpg');
+    background-repeat: no-repeat;
+    color: white 
+    {% comment %} font-family: Arial; {% endcomment %}
 }
 
-.fade-in-text {
+
+{% comment %} .fade-in-text {
     font-size: 150px;
     animation: fadeIn 3s;
 }
@@ -24,6 +30,6 @@ color:  white
 @keyframes fadeIn {
     0% { opacity: 0; }
     100% { opacity: 1; }
-}
+} {% endcomment %}
 
 {% endblock background %}

@@ -105,6 +105,8 @@ intensities = [0 for i in range(len(contours))]
 nrpixels = [0 for i in range(len(contours))]
 objectareas = [0 for i in range(len(contours))]
 objectperimeters = [0 for i in range(len(contours))]
+objectcentroidrow = [0 for i in range(len(contours))]
+objectcentroidcol = [0 for i in range(len(contours))]
 
 # calculate object pixel number and intensities (RSUM + BSUM + GSUM)
 
@@ -224,9 +226,25 @@ for c in range(len(contours)):
 
     concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
 
-# show images
+# get centroid
+
+for i in range(rows):
+    for j in range(cols):
+        ind = obtinere_index(indexedimg, i, j)
+        if ind >= 0:
+            objectcentroidcol[ind] += j
+            objectcentroidrow[ind] += i
 
 for i in range(len(contours)):
-    print(objectprops[i])
+    objectcentroidcol[i] /= nrpixels[i]
+    objectcentroidrow[i] /= nrpixels[i]
+    objectprops[i]['centroidrow'] = objectcentroidrow[i]
+    objectprops[i]['centroidcol'] = objectcentroidcol[i]
+
+# get symmetry (hard)
+
+
+
+# show images
 
 cv.destroyAllWindows()

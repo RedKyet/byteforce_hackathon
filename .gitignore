@@ -1,2 +1,5 @@
 
 db.sqlite3
+Website\__pycache__
+ByteForce\__pycache__
+Website\static\users

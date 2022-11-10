@@ -1,17 +1,11 @@
 import cv2 as cv
 import math
-import time
-import os
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg') # fisierul care tine tot programul laolalta
 
-from adaugare_numar import adaugare_numar
-from concatenare import concatenare_orizontala
-from detect_culoare import get_color
-from obtinere_index import obtinere_index
-
-##############################################################################################################
+##########################################################################################################
 
 imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
 binarythresh = 245
@@ -19,10 +13,29 @@ epsilonarie = 5.0
 epsilonper = 1
 epsilonbright = 0.005
 epsilondark = 0.005
+symmetrystep = 0.017
+symmetrythresh = 0.2
 
-##############################################################################################################
+##########################################################################################################
 
-aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
+def obtinere_index(indeximg, line, column):
+    return (((int(indeximg[line][column][2])) + ((int(indeximg[line][column][1])) << 8) + ((int(indeximg[line][column][0])) << 16)) - 1)
+
+def adaugare_numar (a, num):
+    draw = ImageDraw.Draw(a)
+    font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
+    text= str(num+1)
+    draw.text((5, 5), text= text, fill="red", font=font, align="right")
+    a.save("Assets\\Objects\\element_numar_{}.png".format(num))
+
+def concatenare_orizontala(im1, im2, color=(0, 0, 0)):
+    dst = Image.new('RGB', (im1.width + im2.width,
+                    max(im1.height, im2.height)), color)
+    dst.paste(im1, (0, 0))
+    dst.paste(im2, (im1.width, 0))
+    return dst
+
+##########################################################################################################
 
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
@@ -194,13 +207,32 @@ for i in range(len(contours)):
     objectprops[i]['perimeter'] = objectperimeters[i]
     objectprops[i]['brightness'] = intensities[i]/nrpixels[i]
 
-# sort objects in decreasing order of areas
+# centroid calculation
+
+for i in range(rows):
+    for j in range(cols):
+        ind = obtinere_index(indexedimg, i, j)
+        if ind >= 0:
+            objectcentroidcol[ind] += j
+            objectcentroidrow[ind] += i
+
+for i in range(len(contours)):
+    objectcentroidcol[i] /= nrpixels[i]
+    objectcentroidrow[i] /= nrpixels[i]
+    objectprops[i]['centroidrow'] = objectcentroidrow[i]
+    objectprops[i]['centroidcol'] = objectcentroidcol[i]
+    
+
+# sort objects in decreasing order of areas AND calculate symmetry
 
 image_number=0
 blanc = np.zeros((1, 1, 3), np.uint8)
 cv.imwrite("Assets\\Objects\\rez.png", blanc)
 
 for c in range(len(contours)):
+
+    # creare imagine cu numar
+
     x, y, w, h = cv.boundingRect(contours[c])
     element = alphaimg[y:y+h, x:x+w]
 
@@ -220,30 +252,68 @@ for c in range(len(contours)):
 
     objectprops[c]['filename'] = "Assets\\Objects\\element_{}.png".format(image_number)
 
+    # calculare simetrie
+
+    binaryelement = invbinaryimg[y:y+h, x:x+w]
+    for i in range(h):
+        for j in range(w):
+            ind = obtinere_index(indexedimg, y+i, x+j)
+            if ind is not c:
+                binaryelement[i][j] = 0
+
+    centroid = (objectcentroidrow[c]-y, objectcentroidcol[c]-x)
+    partialsumrow = [[0 for j in range(cols)] for i in range(rows)]
+    partialsumcol = [[0 for j in range(cols)] for i in range(rows)]
+
+    for i in range(h):
+        j = 0
+        if binaryelement[i][j] == 255:
+            partialsumrow[i][j] = 1
+        for j in range(1, w):
+            partialsumrow[i][j] = partialsumrow[i][j-1]
+            if binaryelement[i][j] == 255:
+                partialsumrow[i][j] += 1
+    
+    for j in range(w):
+        i = 0
+        if binaryelement[i][j] == 255:
+            partialsumcol[i][j] = 1
+        for i in range(1, h):
+            partialsumcol[i][j] = partialsumcol[i-1][j]
+            if binaryelement[i][j] == 255:
+                partialsumcol[i][j] += 1
+
+    theta = 0
+    while theta < math.pi:
+        m = math.tan(theta)
+        # y = m * (x - centroid[1]) + centroid[0]
+        area1 = 0
+        area2 = 0
+        for j in range(w):
+            i = int(m * (j - centroid[1]) + centroid[0])
+            if i >= 0 and i < h:
+                if i > 0:
+                    area1 += partialsumcol[i-1][j]
+                if i < h-1:
+                    area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
+            elif i < 0:
+                area2 += partialsumcol[h-1][j]
+            else:
+                area1 += partialsumcol[h-1][j]
+        if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh
+        theta += symmetrystep
+    
+    # concatenare
+
     adaugare_numar(im, image_number)
     image_number += 1
     rez = Image.open("Assets\\Objects\\rez.png")
-
     concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save("Assets\\Objects\\rez.png")
 
-# get centroid
-
-for i in range(rows):
-    for j in range(cols):
-        ind = obtinere_index(indexedimg, i, j)
-        if ind >= 0:
-            objectcentroidcol[ind] += j
-            objectcentroidrow[ind] += i
+# print object properties
 
 for i in range(len(contours)):
-    objectcentroidcol[i] /= nrpixels[i]
-    objectcentroidrow[i] /= nrpixels[i]
-    objectprops[i]['centroidrow'] = objectcentroidrow[i]
-    objectprops[i]['centroidcol'] = objectcentroidcol[i]
-
-# get symmetry (hard)
-
-
+    print(objectprops[i])
 
 # show images
 

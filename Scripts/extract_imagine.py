@@ -6,7 +6,7 @@ import numpy as np
 
 ##############################################################################################################
 
-imgname = "Assets\\Greyscale test\\fotografietest.png"
+imgname = "Assets\\Greyscale test\\start.png"
 binarythresh = 240
 contrastthresh = 40
 
@@ -80,9 +80,16 @@ x,y,w,h = cv.boundingRect(maxper_img)
 element = img[y:y+h, x:x+w]
 cv.imwrite("Assets\\Objects\\element_max_perim_{}.png".format(cv.arcLength(maxper_img, True)), element)
 ################################################################################
-#
-#
-#
+#save min and max brightness image
+intensities = []
+for i in range(len(cnts)):
+    cimg = np.zeros_like(img)
+    cv.drawContours(cimg, contours, i, color=255, thickness=-1)
+    pts = np.where(cimg == 255)
+    intensities.append(img[pts[0], pts[1]])
+print(sum(sum(intensities[1])/len(intensities[1])))
+
+################################################################################
 
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
@@ -93,7 +100,7 @@ for c in cnts:
     
     element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
 
-    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), img)
+    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
     image_number += 1
 
 cv.imshow("grayimg", grayimg)

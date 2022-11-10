@@ -25,7 +25,7 @@ def home(request):
     return render(request, 'home.html')
 
 def upload(request):
-    
+    print('dadada otelu e viata mea')
     uploaded_file = request.FILES['document']
     fs = FileSystemStorage()
     path = 'users/'+str(request.session['id'])+'/cache.jpg'

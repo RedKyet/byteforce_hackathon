@@ -22,38 +22,56 @@ contrastthresh = 20
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
 
+# turn background to white
+
+bgbb = (0, 0, 0, 0)
+bgbbarea = -1
+
 wbimg = img.copy()
-bgbb = 0
-cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=5, upDiff=5)
+rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=5, upDiff=5)[3]
+rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
+if rectarea > bgbbarea:
+    bgbb = rect
+    bgbbarea = rectarea
+    finalwbimg = wbimg.copy()
 
-cv.imshow("img", img)
-cv.imshow("wbimg", wbimg)
-cv.waitKey(0)
-cv.destroyAllWindows()
+wbimg = img.copy()
+rect = cv.floodFill(wbimg, None, (0, rows-1), (255, 255, 255), loDiff=5, upDiff=5)[3]
+rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
+if rectarea > bgbbarea:
+    bgbb = rect
+    bgbbarea = rectarea
+    finalwbimg = wbimg.copy()
 
-quit()
+wbimg = img.copy()
+rect = cv.floodFill(wbimg, None, (cols-1, 0), (255, 255, 255), loDiff=5, upDiff=5)[3]
+rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
+if rectarea > bgbbarea:
+    bgbb = rect
+    bgbbarea = rectarea
+    finalwbimg = wbimg.copy()
 
+wbimg = img.copy()
+rect = cv.floodFill(wbimg, None, (cols-1, rows-1), (255, 255, 255), loDiff=5, upDiff=5)[3]
+rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
+if rectarea > bgbbarea:
+    bgbb = rect
+    bgbbarea = rectarea
+    finalwbimg = wbimg.copy()
 
-grayimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+wbimg = finalwbimg.copy()
+
+# get object contours
+
+grayimg = cv.cvtColor(wbimg, cv.COLOR_BGR2GRAY)
 invbinaryimg = cv.threshold(grayimg, binarythresh, 255,cv.THRESH_BINARY)[1]
 
 contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
 contoursbinaryimg = invbinaryimg.copy()
 cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
 
-contrastarr = [[0 for j in range(cols)] for i in range(rows)]
-'''
-for i in range(rows):
-    for j in range(cols):
-        if (i > 0):
-            contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i-1][j]))))
-        if (i < rows-1):
-            contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i+1][j]))))
-        if (j > 0):
-            contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i][j-1]))))
-        if (j < cols-1):
-            contrastarr[i][j] = max(contrastarr[i][j], np.uint8(abs(int(grayimg[i][j]) - int(grayimg[i][j+1]))))
-'''
+# make inner holes more accurate (optional)
+
 betterholesimg = invbinaryimg.copy()
 
 for i in range(rows):
@@ -71,16 +89,13 @@ for i in range(rows):
             if cnt > 0:
                 betterholesimg[i][j] = 0
 
-#save images
-cnts = cv.findContours(betterholesimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)
-print(type(cnts))
-cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+
 image_number = 0
 
 ###############################################################################
 #save min and max area image
-minar_img=min(cnts,key=lambda x:cv.contourArea(x))
-maxar_img=max(cnts,key=lambda x:cv.contourArea(x))
+minar_img=min(contours,key=lambda x:cv.contourArea(x))
+maxar_img=max(contours,key=lambda x:cv.contourArea(x))
 x,y,w,h = cv.boundingRect(minar_img)
 element = img[y:y+h, x:x+w]
 cv.imwrite("Assets\\Objects\\element_min_area_{}.png".format(cv.contourArea(minar_img)), element)
@@ -90,8 +105,8 @@ cv.imwrite("Assets\\Objects\\element_max_area_{}.png".format(cv.contourArea(maxa
 #
 #
 #save min and max perim image
-minper_img=min(cnts,key=lambda x:cv.arcLength(x, True))
-maxper_img=max(cnts,key=lambda x:cv.arcLength(x, True))
+minper_img=min(contours,key=lambda x:cv.arcLength(x, True))
+maxper_img=max(contours,key=lambda x:cv.arcLength(x, True))
 x,y,w,h = cv.boundingRect(minper_img)
 element = img[y:y+h, x:x+w]
 cv.imwrite("Assets\\Objects\\element_min_perim_{}.png".format(cv.arcLength(minper_img, True)), element)
@@ -101,7 +116,7 @@ cv.imwrite("Assets\\Objects\\element_max_perim_{}.png".format(cv.arcLength(maxpe
 ################################################################################
 #save min and max brightness image
 """intensities = []
-for i in range(len(cnts)):
+for i in range(len(contours)):
     cimg = np.zeros_like(img)
     cv.drawContours(cimg, [contours[i]], -1, color=(255,255,255), thickness=-1)
     pts = np.where(cimg == 255)
@@ -109,12 +124,12 @@ for i in range(len(cnts)):
 print(intensities[0])
 
 maxi = 0
-intensarray = [0] * len(cnts)
-for i in range(len(cnts)):
+intensarray = [0] * len(contours)
+for i in range(len(contours)):
     intensarray[i] = i
 
-for i in range(len(cnts)-1):
-    for j in range(i+1, len(cnts)):
+for i in range(len(contours)-1):
+    for j in range(i+1, len(contours)):
         if sum(sum(intensities[i])/len(intensities[i])) > sum(sum(intensities[j])/len(intensities[j])):
             aux = intensities[i]
             intensities[i] = intensities[j]
@@ -124,7 +139,7 @@ for i in range(len(cnts)-1):
             intensarray[j] = aux2
 
 i = intensarray[0]
-j = intensarray[len(cnts)-1]
+j = intensarray[len(contours)-1]
 
 cv.imshow("img1", img)
 
@@ -135,8 +150,8 @@ cv.drawContours(img, [contours[j]], -1, color=(0,255,0), thickness=-1)"""
 
 ################################################################################
 #fill contour
-cv.drawContours(img,cnts,0,thickness=cv.FILLED,color=[255,255,255])
-cv.drawContours(img,cnts,0,thickness=5,color=[int(s) for s in img[0][0]])
+cv.drawContours(img,contours,0,thickness=cv.FILLED,color=[255,255,255])
+cv.drawContours(img,contours,0,thickness=5,color=[int(s) for s in img[0][0]])
 ################################################################################
 
 
@@ -154,7 +169,7 @@ cv.imshow('Output', out)
 cv.waitKey(0)
 cv.destroyAllWindows()
 ################################################################################
-for c in cnts:
+for c in contours:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
     

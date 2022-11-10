@@ -3,23 +3,41 @@
 from PIL import Image, ImageFont, ImageDraw
 import os
 import fnmatch
+import cv2 as cv
 
-
-#numarat fisiere ROI 
+#numarat fisiere ROI
+#  
 im1 = Image.open('ROI_0.png')
 ac = Image.new('L', (im1.width , im1.height))
+
+
+
 def adaugare_numar (a, num):
+
+    draw = ImageDraw.Draw(a)
+
+    font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
+
+    text= str(num)
+
+    draw.text((5, 5), text= text, fill="red", font=font, align="right")
+
+    a.save("Assets\\Objects\\element_numar_{}.png".format(num))
+
+'''
+
     title_font = ImageFont.truetype('Scripts\\fontu.ttf', 25)
     title_text = num
     image_editable = ImageDraw.Draw(a)
     image_editable.text([15, 15], title_text, fill="red", font=title_font)
-    #ImageDraw.Draw.text(xy, text, fill=None, font=None, anchor=None, spacing=0, align=”left”)
-    im1.save("result.png")
+    
+    im1 = ImageDraw.Draw.text(xy, text, fill=None, font=None, anchor=None, spacing=0, align=”left”)
+ #   cv.imwrite("Assets\\Objects\\element_numar_{}.png".format(num), im1)
 
 
+'''
 # open the image
 
-adaugare_numar(im1, "7")
 '''
 Image1 = Image.open('Assets\\Greyscale test\\start.png')
 

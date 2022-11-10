@@ -3,6 +3,11 @@ import math
 import time
 import os
 import numpy as np
+from PIL import Image, ImageFont, ImageDraw
+
+
+from adaugare_numar import adaugare_numar
+from concatenare import concatenare_orizontala
 
 ##############################################################################################################
 
@@ -56,12 +61,36 @@ for i in range(rows):
 cnts = cv.findContours(betterholesimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 image_number = 0
+
+blanc = np.zeros((2, 2, 3), np.uint8)
+
+cv.imwrite("Assets\\Objects\\rez.png".format(image_number), blanc)
+
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
     element = img[y:y+h, x:x+w]
     cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
+
+
+    #creere imagnie cu numar
+    im = Image.open("Assets\\Objects\\element_{}.png".format(image_number))
+    adaugare_numar(im, image_number)
     image_number += 1
+
+
+    
+    rez = Image.open("Assets\\Objects\\rez.png")
+    
+    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
+    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
+    concatenare_orizontala(rez, im, (0, 0, 0)).save("Assets\\Objects\\rez.png")
+   # rez.save("Assets\\Objects\\rez.png")
+    #creere imagine prin concatenare
+    
+    
+
+
 
 cv.imshow("grayimg", grayimg)
 cv.imshow("invbinaryimg", invbinaryimg)

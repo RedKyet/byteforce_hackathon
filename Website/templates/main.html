@@ -1,17 +1,69 @@
 {% extends '@base.html' %}
 
 {% block content %}
+
+
+
 <h3> Picture: <h3>
 
-<form action = "upload" method = "post" enctype = "multipart/form-data">
+    {% comment %} <form id="file-drop-area" class="flex justify-center items-center w-full" action = "upload" method = "post" enctype = "multipart/form-data">
+        <label for="dropzone-file" class="flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+            <div class="flex flex-col justify-center items-center pt-5 pb-6">
+                <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+            </div>
+            
+            <form id = "f" action = "upload" method = "post" enctype = "multipart/form-data">
+                {% csrf_token %}  
+                <input type = "file" id = "dropzone-file" class="hidden" accept = "image/png, image/jpg, image/jpeg" name = "document">
+            </form>
+        </label>
+    </form>  {% endcomment %}
 
+<form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full" target="frame">
     {% csrf_token %}  
+    <label class="fil flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
+        <input type="file" name = "document" class="w-full h-64" accept = "image/png, image/jpg, image/jpeg" multiple style="position:absolute;opacity: 0;outline: 0;border: 1px solid red;">
 
-    <label for = "file">
-    <input type = "file" id = "file" accept = "image/png, image/jpg, image/jpeg" name = "document">
-
-    <label for = "submit">
-    <input type = "submit" id = "submit">
-
+        <div class="flex flex-col justify-center items-center pt-5 pb-6">
+            <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or JPEG</p>
+        </div>
+            
+            <!-- use multiple, even if it’s not allowed, to be able to show an info text -->
+    </label>
 </form>
+<script>
+    $('input[type=file]').change(function() {
+        //console.log(this.files);
+        var f = this.files;
+        console.log(f)
+        //var el = $(this).parent();
+        //if (f.length > 1) {
+        //        console.log(this.files, 1);
+        //        el.text('Sorry, multiple files are not allowed');
+        //        return;
+        //}
+        // el.removeClass('focus');
+        //el.html(f[0].name + '<br>' +'<span class="sml">' +'type: ' + f[0].type + ', ' +Math.round(f[0].size / 1024) + ' KB</span>');
+        document.getElementById("f").submit()
+    });
+</script>
+<iframe name="frame" style="display:none"></iframe>
 {% endblock content %}
+
+{% block background %}
+body {  
+    background-image: url('Website/cache.jpg');
+    background-repeat: no-repeat;
+    background-color: #001329;
+    color: white;
+    {% comment %} font-family: Arial; {% endcomment %}
+}
+{% endblock background %}
+
+{% block nav3 %}
+<a href="\tool" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-sky-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Services</a>
+{% endblock nav3 %}

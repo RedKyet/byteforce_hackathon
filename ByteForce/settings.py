@@ -128,3 +128,7 @@ import os
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'Website/static') # media directory in the root directory
 MEDIA_URL = '/Website/static/'
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+SESSION_FILE_PATH = 'tmp'

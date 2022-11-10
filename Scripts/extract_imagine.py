@@ -138,6 +138,35 @@ for i in range(len(contours)):
     if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
         cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
 
+########################################################
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
+cul = get_color(aux)
+image_number=0
+cts_by_area=sorted(contours, key=lambda c:cv.contourArea(c), reverse=True)
+for c in cts_by_area:
+    x,y,w,h = cv.boundingRect(c)
+    element = img[y:y+h, x:x+w] #selectam imaginea intr-un dreptunghi
+    cv.imwrite("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)), element)
+
+
+    #creere imagnie cu numar
+    im = Image.open("Assets\\Objects\\element_{}_area_{}_perim_{}.png".format(image_number,cv.contourArea(c),round(cv.arcLength(c, True),4)))
+    adaugare_numar(im, image_number)
+    image_number += 1
+
+
+    
+    #rez = Image.open("Assets\\Objects\\rez.png")
+    
+    #originalImage = cv.imread(concatenare_orizontala(rez, im, (0, 0, 0)))
+    #cv.imwrite("Assets\\Objects\\rez.png", concatenare_orizontala(rez, im, (0, 0, 0)))
+    
+    #concatenare_orizontala(rez, im, cul).save("Assets\\Objects\\rez.png")
+   
+   # rez.save("Assets\\Objects\\rez.png")
+    #creere imagine prin concatenare
+########################################################
+
 cv.imshow("only max arie and min per", onlymaxarieminper)
 cv.imshow("invbinaryimg", invbinaryimg)
 cv.waitKey(0)

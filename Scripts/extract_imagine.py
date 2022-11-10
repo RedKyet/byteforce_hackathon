@@ -15,6 +15,8 @@ from detect_culoare import get_color
 imgname = "Assets\\Greyscale test\\fotografietestalbastra.png"
 binarythresh = 240
 contrastthresh = 20
+epsilonarie = 5.0
+epsilonper = 5.0
 
 ##############################################################################################################
 
@@ -26,6 +28,7 @@ rows, cols, _ = img.shape
 
 bgbb = (0, 0, 0, 0)
 bgbbarea = -1
+bgcolor = (0, 0, 0)
 
 wbimg = img.copy()
 rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=5, upDiff=5)[3]
@@ -33,6 +36,7 @@ rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
 if rectarea > bgbbarea:
     bgbb = rect
     bgbbarea = rectarea
+    bgcolor = img[0][0]
     finalwbimg = wbimg.copy()
 
 wbimg = img.copy()
@@ -41,6 +45,7 @@ rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
 if rectarea > bgbbarea:
     bgbb = rect
     bgbbarea = rectarea
+    bgcolor = img[rows-1][0]
     finalwbimg = wbimg.copy()
 
 wbimg = img.copy()
@@ -49,6 +54,7 @@ rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
 if rectarea > bgbbarea:
     bgbb = rect
     bgbbarea = rectarea
+    bgcolor = img[0][cols-1]
     finalwbimg = wbimg.copy()
 
 wbimg = img.copy()
@@ -57,21 +63,25 @@ rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
 if rectarea > bgbbarea:
     bgbb = rect
     bgbbarea = rectarea
+    bgcolor = img[rows-1][cols-1]
     finalwbimg = wbimg.copy()
 
+bgcolor = [int(s) for s in bgcolor]
+
 wbimg = finalwbimg.copy()
+print(bgcolor)
 
 # get object contours
 
 grayimg = cv.cvtColor(wbimg, cv.COLOR_BGR2GRAY)
-invbinaryimg = cv.threshold(grayimg, binarythresh, 255,cv.THRESH_BINARY)[1]
+invbinaryimg = cv.threshold(grayimg, binarythresh, 255,cv.THRESH_BINARY_INV)[1]
 
 contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
 contoursbinaryimg = invbinaryimg.copy()
 cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
 
 # make inner holes more accurate (optional)
-
+'''
 betterholesimg = invbinaryimg.copy()
 
 for i in range(rows):
@@ -89,11 +99,39 @@ for i in range(rows):
             if cnt > 0:
                 betterholesimg[i][j] = 0
 
-
-image_number = 0
+invbinaryimg = betterholesimg.copy()
+'''
+cv.waitKey(0)
 
 ###############################################################################
 #save min and max area image
+maxarie = -1
+for i in range(len(contours)):
+    if cv.contourArea(contours[i]) > maxarie:
+        maxarie = cv.contourArea(contours[i])
+
+minper = 9999999
+for i in range(len(contours)):
+    if cv.arcLength(contours[i], True) < minper:
+        minper = cv.arcLength(contours[i], True)
+
+print(maxarie)
+print(minper)
+
+onlymaxarieminper = img.copy()
+print(len(contours))
+for i in range(len(contours)):
+    currarie = cv.contourArea(contours[i])
+    currper = cv.arcLength(contours[i], True)
+    if maxarie-currarie > epsilonarie and currper-minper > epsilonper:
+        print("i like to draw")
+        cv.drawContours(onlymaxarieminper, [contours[i]], -1, color=bgcolor, thickness=cv.FILLED)
+
+cv.imshow("only max arie and min per", onlymaxarieminper)
+cv.imshow("invbinaryimg", invbinaryimg)
+cv.waitKey(0)
+quit()
+
 minar_img=min(contours,key=lambda x:cv.contourArea(x))
 maxar_img=max(contours,key=lambda x:cv.contourArea(x))
 x,y,w,h = cv.boundingRect(minar_img)

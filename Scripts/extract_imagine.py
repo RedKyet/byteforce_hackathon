@@ -287,21 +287,37 @@ for c in range(len(contours)):
     while theta < math.pi:
         m = math.tan(theta)
         # y = m * (x - centroid[1]) + centroid[0]
+        # y - centroid[0] = m * (x - centroid[1])
+        # (y - centroid[0]) / m = x - centroid[1]
+        # x = (y - centroid[0]) / m + centroid[1]
         area1 = 0
         area2 = 0
-        for j in range(w):
-            i = int(m * (j - centroid[1]) + centroid[0])
-            if i >= 0 and i < h:
-                if i > 0:
-                    area1 += partialsumcol[i-1][j]
-                if i < h-1:
-                    area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
-            elif i < 0:
-                area2 += partialsumcol[h-1][j]
-            else:
-                area1 += partialsumcol[h-1][j]
-        if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh:
-            
+        if w <= h:
+            for j in range(w):
+                i = int(m * (j - centroid[1]) + centroid[0])
+                if i >= 0 and i < h:
+                    if i > 0:
+                        area1 += partialsumcol[i-1][j]
+                    if i < h-1:
+                        area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
+                elif i < 0:
+                    area2 += partialsumcol[h-1][j]
+                else:
+                    area1 += partialsumcol[h-1][j]
+        else:
+            for i in range(h):
+                j = int((i - centroid[0]) / m + centroid[1])
+                if j >= 0 and j < w:
+                    if j > 0:
+                        area1 += partialsumrow[i][j-1]
+                    if j < w-1:
+                        area2 += (partialsumrow[i][w-1] - partialsumrow[i][j])
+                elif j < 0:
+                    area2 += partialsumrow[i][w-1]
+                else:
+                    area1 += partialsumrow[i][w-1]
+
+        #if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh:
         theta += symmetrystep
     
     # concatenare

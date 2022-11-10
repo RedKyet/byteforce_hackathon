@@ -58,6 +58,7 @@ print(type(cnts))
 cnts = cnts[0] if len(cnts) == 2 else cnts[1]
 image_number = 0
 
+###############################################################################
 #save min and max area image
 minar_img=min(cnts,key=lambda x:cv.contourArea(x))
 maxar_img=max(cnts,key=lambda x:cv.contourArea(x))
@@ -78,7 +79,7 @@ cv.imwrite("Assets\\Objects\\element_min_perim_{}.png".format(cv.arcLength(minpe
 x,y,w,h = cv.boundingRect(maxper_img)
 element = img[y:y+h, x:x+w]
 cv.imwrite("Assets\\Objects\\element_max_perim_{}.png".format(cv.arcLength(maxper_img, True)), element)
-#
+################################################################################
 #
 #
 #

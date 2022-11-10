@@ -8,13 +8,96 @@ import numpy as np
 
 imgname = "Assets\\Greyscale test\\start.png"
 binarythresh = 240
-contrastthresh = 40
+contrastthresh = 10
 
 ##############################################################################################################
 
 
 img = cv.imread(imgname, cv.IMREAD_COLOR)
 rows, cols, _ = img.shape
+
+# algoritmul lui lee pt gasirea fundalului
+
+contrastarr = [[0 for j in range(cols)] for i in range(rows)]
+
+cnt = 0
+dx = [-1, 0, 1, 0]
+dy = [0, 1, 0, -1]
+nrfilled = 0
+bbxmini = 999999
+bbxmaxi = -1
+bbymini = 999999
+bbymaxi = -1
+
+bgbb = 0
+bgbbarea = -1
+
+queue = []
+
+def contrastarrFill():
+    global contrastarr
+    global img
+    global contrastthresh
+    global nrfilled
+    global bbxmini, bbxmaxi, bbymini, bbymaxi
+    global queue
+    while len(queue) > 0:
+        i = queue[0][0]
+        j = queue[0][1]
+        queue.pop()
+        if i < bbxmini:
+            bbxmini = i
+        if i > bbxmaxi:
+            bbxmaxi = i
+        if j < bbymini:
+            bbymini = j
+        if j > bbymaxi:
+            bbymaxi = j
+        nrfilled += 1
+        color1 = img[i][j]
+        color1 = [int(el) for el in color1]
+        for ind in range(4):
+            x = i+dx[ind]
+            y = j+dy[ind]
+            if (x >= 0 and x < rows and y >= 0 and y < cols):
+                if contrastarr[x][y] == 0:
+                    color2 = img[x][y]
+                    color2 = [int(el) for el in color2]
+                    mandist = abs(color1[0]-color2[0]) + abs(color1[1]-color2[1]) + abs(color1[2]-color2[2])
+                    if mandist < contrastthresh:
+                        contrastarr[x][y] = cnt
+                        queue.append((x, y))
+
+
+for i in range(rows):
+    for j in range(cols):
+        if contrastarr[i][j] == 0:
+            cnt += 1
+            nrfilled = 0
+            bbxmini = 999999
+            bbxmaxi = -1
+            bbymini = 999999
+            bbymaxi = -1
+            queue.append((i, j))
+            contrastarr[i][j] = cnt
+            contrastarrFill()
+            if (bbxmaxi-bbxmini+1)*(bbymaxi-bbymini+1) > bgbbarea:
+                bgbbarea = (bbxmaxi-bbxmini+1)*(bbymaxi-bbymini+1)
+                bgbb = cnt
+
+wbimg = img.copy()
+for i in range(rows):
+    for j in range(cols):
+        if contrastarr[i][j] == bgbb:
+            wbimg[i][j] = (255, 255, 255)
+
+cv.imshow("wbimg", wbimg)
+cv.waitKey(0)
+cv.destroyAllWindows()
+
+quit()
+
+
 grayimg = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
 invbinaryimg = cv.threshold(grayimg, binarythresh, 255, cv.THRESH_BINARY_INV)[1]
 
@@ -90,7 +173,14 @@ for i in range(len(cnts)):
 print(sum(sum(intensities[1])/len(intensities[1])))
 
 ################################################################################
+#delete image inside contour
 
+
+# Show the output image
+cv.imshow('Output', out)
+cv.waitKey(0)
+cv.destroyAllWindows()
+################################################################################
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)

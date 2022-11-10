@@ -9,6 +9,7 @@ from PIL import Image, ImageFont, ImageDraw
 from adaugare_numar import adaugare_numar
 from concatenare import concatenare_orizontala
 from detect_culoare import get_color
+from obtinere_index import obtinere_index
 
 ##############################################################################################################
 
@@ -69,7 +70,6 @@ if rectarea > bgbbarea:
 bgcolor = [int(s) for s in bgcolor]
 
 wbimg = finalwbimg.copy()
-print(bgcolor)
 
 # get object contours
 
@@ -79,6 +79,16 @@ invbinaryimg = cv.threshold(grayimg, binarythresh, 255,cv.THRESH_BINARY_INV)[1]
 contours = cv.findContours(invbinaryimg, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_NONE)[0]
 contoursbinaryimg = invbinaryimg.copy()
 cv.drawContours(contoursbinaryimg, contours, -1, color=(255, 255, 255), thickness=cv.FILLED)
+
+# give indexes to objects
+
+indexedimg = np.zeros((rows, cols, 3), np.uint8)
+
+for i in range(len(contours)):
+    cr = ((i+1) & 255)
+    cg = (((i+1) >> 8) & 255)
+    cb = (((i+1) >> 16) & 255)
+    cv.drawContours(indexedimg, [contours[i]], -1, color=(cb, cg, cr), thickness=cv.FILLED)
 
 # make inner holes more accurate (optional)
 '''
@@ -103,23 +113,25 @@ invbinaryimg = betterholesimg.copy()
 '''
 cv.waitKey(0)
 
-###############################################################################
 #save min and max area image
+
+objectareas = [0] * len(contours)
+objectperimeters = [0] * len(contours)
+
 maxarie = -1
 for i in range(len(contours)):
     if cv.contourArea(contours[i]) > maxarie:
         maxarie = cv.contourArea(contours[i])
+    objectareas[i] = cv.contourArea(contours[i])
 
 minper = 9999999
 for i in range(len(contours)):
     if cv.arcLength(contours[i], True) < minper:
         minper = cv.arcLength(contours[i], True)
-
-print(maxarie)
-print(minper)
+    objectperimeters[i] = cv.arcLength(contours[i], True)
 
 onlymaxarieminper = img.copy()
-print(len(contours))
+
 for i in range(len(contours)):
     currarie = cv.contourArea(contours[i])
     currper = cv.arcLength(contours[i], True)
@@ -129,30 +141,9 @@ for i in range(len(contours)):
 cv.imshow("only max arie and min per", onlymaxarieminper)
 cv.imshow("invbinaryimg", invbinaryimg)
 cv.waitKey(0)
-quit()
 
-minar_img=min(contours,key=lambda x:cv.contourArea(x))
-maxar_img=max(contours,key=lambda x:cv.contourArea(x))
-x,y,w,h = cv.boundingRect(minar_img)
-element = img[y:y+h, x:x+w]
-cv.imwrite("Assets\\Objects\\element_min_area_{}.png".format(cv.contourArea(minar_img)), element)
-x,y,w,h = cv.boundingRect(maxar_img)
-element = img[y:y+h, x:x+w]
-cv.imwrite("Assets\\Objects\\element_max_area_{}.png".format(cv.contourArea(maxar_img)), element)
-#
-#
-#save min and max perim image
-minper_img=min(contours,key=lambda x:cv.arcLength(x, True))
-maxper_img=max(contours,key=lambda x:cv.arcLength(x, True))
-x,y,w,h = cv.boundingRect(minper_img)
-element = img[y:y+h, x:x+w]
-cv.imwrite("Assets\\Objects\\element_min_perim_{}.png".format(cv.arcLength(minper_img, True)), element)
-x,y,w,h = cv.boundingRect(maxper_img)
-element = img[y:y+h, x:x+w]
-cv.imwrite("Assets\\Objects\\element_max_perim_{}.png".format(cv.arcLength(maxper_img, True)), element)
-################################################################################
 #save min and max brightness image
-"""intensities = []
+intensities = []
 for i in range(len(contours)):
     cimg = np.zeros_like(img)
     cv.drawContours(cimg, [contours[i]], -1, color=(255,255,255), thickness=-1)
@@ -183,14 +174,7 @@ cv.imshow("img1", img)
 print(sum(sum(intensities[i]))/len(intensities[i]))
 print(sum(sum(intensities[j]))/len(intensities[j]))
 cv.drawContours(img, [contours[i]], -1, color=(255,0,0), thickness=-1)
-cv.drawContours(img, [contours[j]], -1, color=(0,255,0), thickness=-1)"""
-
-################################################################################
-#fill contour
-cv.drawContours(img,contours,0,thickness=cv.FILLED,color=[255,255,255])
-cv.drawContours(img,contours,0,thickness=5,color=[int(s) for s in img[0][0]])
-################################################################################
-
+cv.drawContours(img, [contours[j]], -1, color=(0,255,0), thickness=-1)
 
 blanc = np.zeros((1, 1, 3), np.uint8)
 
@@ -229,12 +213,6 @@ for c in contours:
     
     
 cv.imshow("img", img)
-
-
-
-cv.imshow("grayimg", grayimg)
-cv.imshow("invbinaryimg", invbinaryimg)
-cv.imshow("betterholesimg", betterholesimg)
 
 cv.waitKey(0)
 cv.destroyAllWNHMindows()

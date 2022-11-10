@@ -12,7 +12,7 @@ from detect_culoare import get_color
 
 ##############################################################################################################
 
-imgname = "Assets\\Greyscale test\\fotografietest.png"
+imgname = "Assets\\Greyscale test\\Gaina4.jpg"
 binarythresh = 240
 contrastthresh = 40
 
@@ -65,7 +65,7 @@ image_number = 0
 
 blanc = np.zeros((1, 1, 3), np.uint8)
 
-aux = Image.open('Assets\\Greyscale test\\start.png')
+aux = Image.open('Assets\\Greyscale test\\Gaina4.jpg')
 cul = get_color(aux)
 
 cv.imwrite("Assets\\Objects\\rez.png".format(image_number), blanc)

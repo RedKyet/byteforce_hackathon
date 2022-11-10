@@ -2,18 +2,7 @@
 
 {% block content %}
 
-<style>
-input[type=file] {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    outline: 0;
-    border: 1px solid red;
-}
-</style>
+
 
 <h3> Picture: <h3>
 
@@ -35,12 +24,14 @@ input[type=file] {
 <form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full" target="frame">
     {% csrf_token %}  
     <label class="fil flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
+        <input type="file" name = "document" class="w-full h-64" accept = "image/png, image/jpg, image/jpeg" multiple style="position:absolute;opacity: 0;outline: 0;border: 1px solid red;">
+
         <div class="flex flex-col justify-center items-center pt-5 pb-6">
             <svg aria-hidden="true" class="mb-3 w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
             <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
             <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or JPEG</p>
         </div>
-            <input type="file" name = "document" accept = "image/png, image/jpg, image/jpeg" multiple style="position: absolute;left: 0;top: 0;width: 100%;height: 100%;opacity: 0;outline: 0;border: 1px solid red;">
+            
             <!-- use multiple, even if it’s not allowed, to be able to show an info text -->
     </label>
 </form>

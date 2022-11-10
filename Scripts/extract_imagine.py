@@ -60,9 +60,12 @@ image_number = 0
 for c in cnts:
     x,y,w,h = cv.boundingRect(c)
     #cv.rectangle(img, (x, y), (x + w, y + h), (36,255,12), 2)
-    cv.drawContours(img, [c], -1, (0,255,255), 1)
+    
+    #draw contour
+    #cv.drawContours(img, [c], -1, (0,255,255), 1)
+    
     element = img[y:y+h, x:x+w]
-    cv.imwrite("Assets\\Objects\\element_{}.png".format(image_number), element)
+    cv.imwrite("Assets\\Objects\\element_{}_cont_{}.png".format(image_number,cv.contourArea(c)), element)
     image_number += 1
 
 cv.imshow("grayimg", grayimg)

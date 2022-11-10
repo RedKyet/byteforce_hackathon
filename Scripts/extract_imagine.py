@@ -218,7 +218,7 @@ for c in contours:
 cv.imshow("img", img)
 
 cv.waitKey(0)
-cv.destroyAllWNHMindows()
+cv.destroyAllWindows()
 
 '''
 COLT DE DAT CU MNJMNJMJNNHMJ IN TASTATURA

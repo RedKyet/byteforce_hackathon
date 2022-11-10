@@ -45,9 +45,11 @@
                 color: white;
             }
 
+            {% block hover %}
             a:hover {
                 color: #8FE3CF;
             }
+            {% endblock hover %}
 
             {% block background %}
             {% endblock background %}
@@ -60,9 +62,9 @@
                 background: #1f2937;
             }
 
-            {% comment %} #1f2937 to make scrollbar dissapear {% endcomment %}
+            {% comment %} #256D85 to make scrollbar appear {% endcomment %}
             ::-webkit-scrollbar-thumb {
-                background: #256D85; 
+                background: #1f2937; 
             }
 
             @font-face {

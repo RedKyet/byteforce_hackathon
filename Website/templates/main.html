@@ -38,8 +38,23 @@
         </label>
     </div>
 </form>
-<img id="userpicture" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" onerror="this.src='static/blank.png'" width="200" height="300">
+<img id="userpicture" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" onerror="this.src='static/blank.png'">
+<div id="photos"></div>
+<style>
+    img{
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .id{
+        filter: brightness(1);
+        
+    }
+    .id:hover{
+        filter: brightness(1.75);
+    }
+</style>
 <script>
+    get();
     $('input[type=file]').change(function() {
         //console.log(this.files);
         var f = this.files;
@@ -53,8 +68,30 @@
         // el.removeClass('focus');
         //el.html(f[0].name + '<br>' +'<span class="sml">' +'type: ' + f[0].type + ', ' +Math.round(f[0].size / 1024) + ' KB</span>');
         document.getElementById("f").submit()
+        for(var i = 0; i<=100000000; i++){
+            var a =a+i*i
+        }
+        url='http://127.0.0.1:8000/magic'
+        fetch(url)
+  .then((response) => response.json())
+  .then((data) => {
+    get();
+    console.log("DAAA otelu")
+    var info = data
+    console.log(info);
+    var photos=document.getElementById('photos')
+    for (const key in info) {
 
-        
+        console.log(`${key}: ${info[key]}`);
+        console.log(info[key])
+        var obj = info[key]
+        photos.innerHTML+=`<img class="id" src="${obj['filename']}" onerror="this.src='static/blank.png'">`
+    }
+
+
+    
+});
+  //get();
 
     //var form = document.getElementById("f");
     //form.preventDefault(); // avoid to execute the actual submit of the form.
@@ -74,7 +111,7 @@
     //});
 //
     });
-    setInterval(get, 1000)
+    //setInterval(get, 1000)
     function get(){
         url = 'http://127.0.0.1:8000/data'
     fetch(url)

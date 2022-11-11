@@ -38,12 +38,21 @@
         </label>
     </div>
 </form>
-<img id="userpicture" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" onerror="this.src='static/blank.png'">
-<div id="photos"></div>
+<div class="px-8 content-center text-center">
+<div id="photos"  style="position:relative;width:100%; height:100%;">
+    <img id="userpicture" class="a" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" onerror="this.src='static/blank.png'">
+
+</div>
+<div id="ans"></div>
+</div>
 <style>
     img{
         max-width: 100%;
         max-height: 100%;
+        
+    }
+    .a{
+        position:absolute;
     }
     .id{
         filter: brightness(1);
@@ -54,6 +63,7 @@
     }
 </style>
 <script>
+    let id;
     get();
     $('input[type=file]').change(function() {
         //console.log(this.files);
@@ -85,8 +95,30 @@
         console.log(`${key}: ${info[key]}`);
         console.log(info[key])
         var obj = info[key]
-        photos.innerHTML+=`<img class="id" src="${obj['filename']}" onerror="this.src='static/blank.png'">`
+        var box = obj['boundingbox']
+        var y = box[0]
+        var x = box[1]
+        photos.innerHTML+=`<img data-popover-target="popover-default${key}" class="id a" src="${obj['filename']}" onerror="this.src='static/blank.png'" style="left:${x}px;top:${y}px;">`
+        //photos.innerHTML+=`<button data-popover-target="popover-default${key}" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" style="position:absolute;left:${x}px;top:${y}px;">Default popover</button>`
+        //photos.innerHTML+=`<div data-popover id="popover-default${key}" role="tooltip" class="inline-block absolute invisible z-10 w-64 text-sm font-light text-gray-500 bg-white rounded-lg border border-gray-200 shadow-sm opacity-0 transition-opacity duration-300 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800" style="position:absolute;left:${x}px;top:${y}px;"><div class="py-2 px-3 bg-gray-100 rounded-t-lg border-b border-gray-200 dark:border-gray-600 dark:bg-gray-700"><h3 class="font-semibold text-gray-900 dark:text-white">Popover title</h3></div><div class="py-2 px-3"><p>And heres some amazing content. Its very engaging. Right?</p></div><div data-popper-arrow></div></div>`
+
     }
+    ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/asymmetrical.png" onerror="this.src='static/blank.png'">`
+    ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
+        <p>asymmetrical.png</p>
+    </div>`
+    ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/bright_dark.png" onerror="this.src='static/blank.png'">`
+    ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
+        <p>bright_dark.png</p>
+    </div>`
+    ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/longlong.png" onerror="this.src='static/blank.png'">`
+    ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
+        <p>longlong.png</p>
+    </div>`
+    ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/maxarea_minperimeter.png" onerror="this.src='static/blank.png'">`
+    ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
+        <p>maxarea_minperimeter.png</p>
+    </div>`
 
 
     
@@ -117,6 +149,7 @@
     fetch(url)
     .then((response) => response.json())
     .then((data) => {
+        id=data['uid']
     imgurl=`http://127.0.0.1:8000/static/users/${data['uid']}/cache.jpg?`+ new Date().getTime();
     document.getElementById('userpicture').src=imgurl
     console.log(data)

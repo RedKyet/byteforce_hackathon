@@ -13,16 +13,16 @@ def magic(imagepath: str):
     path = path + '\\'
     photofolder = path + "photos\\"
     fontfilepath = "Scripts\\fontu.ttf"
-    binarythresh = 248
+    binarythresh = 251
     epsilonarie = 5.0
     epsilonper = 1
     epsilonbright = 0.005
     epsilondark = 0.005
     symmetrystep = 0.017
-    symmetrythresh = 0.1
+    symmetrythresh = 0.2
     lowfilldiff = 5
     highfilldiff = 5
-    finalsymmetrythresh = 0.985
+    finalsymmetrythresh = 0.998
     smallthresh = 10
 
     ##########################################################################################################
@@ -322,6 +322,15 @@ def magic(imagepath: str):
                 partialsumcol[i][j] = partialsumcol[i-1][j]
                 if binaryelement[i][j] == 255:
                     partialsumcol[i][j] += 1
+        
+        # normalizare symmetrystep
+
+        if h+w <= 180:
+            symmetrystep = 0.054
+        elif h+w <= 360:
+            symmetrystep = 0.036
+        else:
+            symmetrystep = 0.018
         
         # cazul linie orizontala
 

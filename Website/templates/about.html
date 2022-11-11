@@ -2,20 +2,127 @@
 
 {% block content %}
 
+<script>
+    {% comment %} window.onbeforeunload = function() {
+        window.scrollTo(0, 0);
+    }; {% endcomment %}
+
+    $(document).ready(function(){
+        $(this).scrollTop(0);
+    });
+</script>
+
 <div class="h-64">
-    <div class="text-center animate__animated animate__fadeIn" style=""> 
-        <h1 style="font-size: 5rem; color: white"> About </h1>
+    <div class="pt-16 pb-4 pl-16 pr-2 text-left animate__animated animate__fadeIn" style=""> 
+        <h1 style="font-size: 3rem; color: white"> Our Goal </h1>
     </div>
-    <h1 class="text-center animate__animated animate__slideInLeft animate__delay-1s" style="font-size: 2rem; color: white"> The <span style="color: #b8e5ff">Byte</span><span style="color: #67C8FF">Force</span> team accepted your challenge </h1>
-    <h1 class="text-center animate__animated animate__slideInRight animate__delay-2s" style="font-size: 2rem; color: white"> and delivered on its promise: </h1>
-    <h1 class="text-center animate__animated animate__slideInLeft animate__delay-3s" style="font-size: 2rem; color: white"> We present to you.. </h1>
-    {% comment %} rounded-lg border-2 border-amber-400 {% endcomment %}
-    <div>
-        <h1 class=" text-center animate__animated animate__slideInRight animate__delay-4s" style="font-size: 2.5rem; color: white"> Zmeurica 3.14 </h1>
+
+    <div class="pl-8 pr-2 max-w-screen-md animate__animated animate__fadeInLeft animate__delay-1s" style=""> 
+        <h1 class="text-gray-400" style="font-size: 1.25rem"> <a class="whitespace-pre">      </a> During the 48 hours, all of us worked togheter to create something that we would be proud of. We split our tasks. Durly and Lazăr would be creating an website to display the algorithm that Teo, Rareș and Maf would be working on. The team has learned a lot from this experience, from using OpenCV to working with Django and most importantly, coding togheter, in sync. We believe that it's not the task we've done that is amazing, but how we came togheter to accomplish such a feat.</h1>
     </div>
-    <h1 class="text-center animate__animated animate__slideInLeft animate__delay-4s" style="font-size: 1.5rem; color: white"> by Durly, Lazăr, Maf, Teo and Rareș </h1>
+    
+    <div class="pt-16 pb-4 pl-16 pr-2 text-left animate__animated animate__fadeIn animate__delay-4s" style=""> 
+        <h1 style="font-size: 3rem; color: white"> Timeline </h1>
+    </div>
+    
+    <div class="pb-16 text-start animate__animated animate__slideInLeft animate__delay-5s" style="">
+        <ol class="relative border-l border-gray-200 dark:border-gray-700">                  
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">13:20 / 1 hour and 20 minutes into the hackathon</time>
+                <h1 class="text-2xl text-gray-900 dark:text-white">The team decides on Django</h1>
+                <p class="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">We have all decided on a Django-made website to showcase the OpenCV algorithm. We created the git repository and left for discussions over some pizza.</p>
+                <a href="https://opencv.org/" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">About OpenCV <svg class="ml-2 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></a>
+                <a href="https://www.djangoproject.com/" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">About Django <svg class="ml-2 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></a>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">16:55 / 4 hours and 55 minutes into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">And, we took off</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">The tasks have been split, and everyone was busy with work. Every now and then, we would go up to the whiteboard and start theorycrafting algorithms.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">19:01/ 7 hours and 1 minute into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">A small step for the hackathon, a big step for us</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Django website? Operational</p> 
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Ideas? Tons.</p> 
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Cropping? Masking? Done.</p> 
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> MOTIVATION? 100%.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">22:15 / 9 hours and 15 minutes into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Day 1, over!</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">We all agreed that 9 hours might be a good stop for today, so we went home to recharge our batteries and get ready for Day 2. Almost half of the project was done already!</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Work on the backend prototype has just finished, and it was time to do the frontend. The other half of the team was ready to start crossing off the assignments regarding the image.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">06:34 / 18 hours and 34 minutes into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Earlybirds</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">By 6:34, we started arriving. By 7:30, all of us were here and ready to work. First thing we did? Image area.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">10:20 / 22 hours and 20 minutes into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Four done, one left</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">And.. the symmetry sorting was all that's left, and oh, it would take a lot more time to finish that. But for now? We were getting pretty confident.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">12:00 / 24 hours into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Looking back a day</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Food? Check.</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Water? Check.</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Pretty Website? Almost check.</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Eyesight? um...</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">12:00 / 24 hours into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Tailwind the Framework</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400"> Tailwind is a CSS based framework that makes Web Design smooth like butter. Let's just say the 12 hours of sleep that Durly got are thanks to this.</p>
+                <a href="https://tailwindcss.com/" class="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-200 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">About Tailwind <svg class="ml-2 w-3 h-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg></a>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">19:13 / 4 hours and 55 minutes into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Time for Merge</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Although the symmetry algorithm was not finished yet, it was time to put the processing into the website. And we were going to do just that. Right? RIGHT?</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">"Unable to pull when changes are present on your branch. The following files would be overwritten:</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">.gitignore"</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">23:50/ 35 hours and 50 minutes into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">Day 2, over!</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Twice the coding, twice the hours, twice the bugs, twice the sighs and twice the pizza.</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">Twice the sleepiness too.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">07:02/ 43 hours an 2 minutes</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">We can't pass a dictionary</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">"What do you mean you can't pass a dictionary?!?"</p>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">For a moment, we looked at each other and realised we might have overestimated Python.</p>
+            </li>
+            <li class="pl-10 pr-2 mb-10 ml-4">
+                <div class="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time class="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">13:00 / 49 hours into the hackathon</time>
+                <h2 class="text-2xl text-gray-900 dark:text-white">The Grand Finale!</h2>
+                <p class="text-base font-normal text-gray-500 dark:text-gray-400">30+ hours of work from each member, more than 1000 lines of code, around 16 Instagram stories and ONE FINAL PRODUCT</p>
+            </li>
+        </ol>
+    </div>
+
+
+        
 </div>
 {% endblock content %}
+
+{% block hover %}
+{% endblock hover %}
 
 {% block background %}
 body {  

@@ -5,10 +5,12 @@ import json
 import numpy as np
 from PIL import Image, ImageFont, ImageDraw
 
-def magic(path):
+def magic(imagepath: str):
 
-    imgname = path + "\\cake.png"
-    photofolder = path + "\\photos"
+    imgname = imagepath
+    path = imgname.rstrip('\\', 1)[0]
+    path = path + '\\'
+    photofolder = path + "photos\\"
     fontfilepath = "Scripts\\fontu.tff"
     binarythresh = 245
     epsilonarie = 5.0
@@ -19,6 +21,9 @@ def magic(path):
     symmetrythresh = 0.2
 
     ##########################################################################################################
+
+    if not os.path.exists(path+"photos"):
+        os.mkdir(path+"photos")
     
     def obtinere_index(indeximg, line, column):
         return (((int(indeximg[line][column][2])) + ((int(indeximg[line][column][1])) << 8) + ((int(indeximg[line][column][0])) << 16)) - 1)
@@ -28,7 +33,7 @@ def magic(path):
         font = ImageFont.truetype(fontfilepath, 25)
         text= str(num)
         draw.text((5, 5), text= text, fill="red", font=font, align="right")
-        a.save(photofolder+"\\{}_withnumber.png".format(num))
+        a.save(photofolder+"{}_withnumber.png".format(num))
 
     def concatenare_orizontala(im1, im2, color=(0, 0, 0)):
         dst = Image.new('RGB', (im1.width + im2.width,
@@ -248,10 +253,10 @@ def magic(path):
         
         objectprops[c]['boundingbox'] = [y, x, y+h-1, x+w-1]
 
-        cv.imwrite(photofolder+"\\{}.png".format(c), element)
-        im = Image.open(photofolder+"\\{}.png".format(c))
+        cv.imwrite(photofolder+"{}.png".format(c), element)
+        im = Image.open(photofolder+"{}.png".format(c))
 
-        objectprops[c]['filename'] = photofolder+"\\{}.png".format(c)
+        objectprops[c]['filename'] = photofolder+"{}.png".format(c)
 
         # calculare simetrie
 
@@ -324,9 +329,9 @@ def magic(path):
         # concatenare
 
         adaugare_numar(im, c)
-        objectprops[c]['withnumbername'] = photofolder+"\\{}_withnumber.png".format(c)
-        rez = Image.open(photofolder+"\\longlong.png")
-        concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"\\longlong.png")
+        objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
+        rez = Image.open(photofolder+"longlong.png")
+        concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
 
     # print object properties
 
@@ -335,11 +340,11 @@ def magic(path):
 
     # show images
 
-    with open(path+"\\isdone.txt", "w") as isdonefile:
+    with open(path+"isdone.txt", "w") as isdonefile:
         isdonefile.write("100")
     
     objectpropsjson = json.dumps(objectprops, indent=2)
-    with open(path+"\\data.txt", "w") as objectpropsfile:
+    with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
     
-magic("Website\\static\\users\\mf8SaEchO8o")
+magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

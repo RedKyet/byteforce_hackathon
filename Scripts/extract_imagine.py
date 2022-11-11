@@ -18,10 +18,11 @@ def magic(imagepath: str):
     epsilonper = 1
     epsilonbright = 0.005
     epsilondark = 0.005
-    symmetrystep = 0.051
-    symmetrythresh = 0.2
+    symmetrystep = 0.017
+    symmetrythresh = 0.04
     lowfilldiff = 5
     highfilldiff = 5
+    finalsymmetrythresh = 0.985
 
     ##########################################################################################################
 
@@ -37,7 +38,7 @@ def magic(imagepath: str):
     def adaugare_numar (a, num):
         draw = ImageDraw.Draw(a)
         font = ImageFont.truetype(fontfilepath, 25)
-        text= str(num)
+        text= str(num+1)
         draw.text((5, 5), text= text, fill="red", font=font, align="right")
         a.save(photofolder+"{}_withnumber.png".format(num))
 
@@ -50,8 +51,15 @@ def magic(imagepath: str):
 
     ##########################################################################################################
 
-    img = cv.imread(imgname, cv.IMREAD_COLOR)
-    rows, cols, _ = img.shape
+    originalimg = cv.imread(imgname, cv.IMREAD_UNCHANGED)
+    rows, cols, _ = originalimg.shape
+    for i in range(rows):
+        for j in range(cols):
+            if originalimg[i][j][3] < 255:
+                originalimg[i][j][0] = 255
+                originalimg[i][j][1] = 255
+                originalimg[i][j][2] = 255
+    img = cv.cvtColor(originalimg, cv.COLOR_BGRA2BGR)
 
     # turn background to white
 
@@ -244,11 +252,13 @@ def magic(imagepath: str):
     blanc = np.zeros((1, 1, 3), np.uint8)
     cv.imwrite(photofolder+"\\longlong.png", blanc)
 
-    theta = 0
+    theta = symmetrystep
     tanarray = []
     while theta < math.pi:
         tanarray.append(math.tan(theta))
         theta += symmetrystep
+    
+    onlyasymmetricalimg = img.copy()
 
     for c in range(len(contours)):
 
@@ -303,8 +313,107 @@ def magic(imagepath: str):
                 partialsumcol[i][j] = partialsumcol[i-1][j]
                 if binaryelement[i][j] == 255:
                     partialsumcol[i][j] += 1
+        
+        # cazul linie orizontala
+        
+        m = 0
+
+        legit = 0
+
+        # y = m * (x - centroid[1]) + centroid[0]
+        # x = (y - centroid[0]) / m + centroid[1]
+        area1 = 0
+        area2 = 0
+        if w <= h:
+            for j in range(w):
+                i = int(centroid[0])
+                if i >= 0 and i < h:
+                    if i > 0:
+                        area1 += partialsumcol[i-1][j]
+                    if i < h-1:
+                        area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
+                elif i < 0:
+                    area2 += partialsumcol[h-1][j]
+                else:
+                    area1 += partialsumcol[h-1][j]
+        else:
+            for i in range(h):
+                if i < int(centroid[0]):
+                    area1 += partialsumrow[i][w-1]
+                elif i > int(centroid[0]):
+                    area2 += partialsumrow[i][w-1]
+    
+        if abs(area1-area2) / (area1+area2+objectperimeters[c]//5) < symmetrythresh:
+            #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
+
+            legit = 0
+            for i in range (0, h):
+                for j in range (0, w):
+                    if binaryelement[i][j] == 255:
+                        jb = j
+                        ib = int(centroid[0]+(centroid[0]-i))
+
+                        if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
+                            legit = legit + 1
+            legit = (legit + objectperimeters[c]//2) / nrpixels[c]
+        
+        if legit > objectsymmetryscore[c]:
+            objectsymmetryscore[c] = legit
+            objectsymmetryaxis[c] = m
+        
+        # cazul linie verticala
+        
+        m = math.tan(math.pi/2)
+
+        legit = 0
+
+        # y = m * (x - centroid[1]) + centroid[0]
+        # x = (y - centroid[0]) / m + centroid[1]
+        area1 = 0
+        area2 = 0
+        if w <= h:
+            for j in range(w):
+                if j < int(centroid[1]):
+                    area1 += partialsumcol[h-1][j]
+                elif j > int(centroid[1]):
+                    area2 += partialsumcol[h-1][j]
+        else:
+            for i in range(h):
+                j = int(centroid[1])
+                if j >= 0 and j < w:
+                    if j > 0:
+                        area1 += partialsumrow[i][j-1]
+                    if j < w-1:
+                        area2 += (partialsumrow[i][w-1] - partialsumrow[i][j])
+                elif j < 0:
+                    area2 += partialsumrow[i][w-1]
+                else:
+                    area1 += partialsumrow[i][w-1]
+                
+    
+        if abs(area1-area2) / (area1+area2+objectperimeters[c]//5) < symmetrythresh:
+            #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
+
+            legit = 0
+            for i in range (0, h):
+                for j in range (0, w):
+                    if binaryelement[i][j] == 255:
+                        ib = i
+                        jb = int(centroid[1] + (centroid[1]-j))
+
+                        if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
+                            legit = legit + 1
+            legit = (legit + objectperimeters[c]//2) / nrpixels[c]
+        
+        if legit > objectsymmetryscore[c]:
+            objectsymmetryscore[c] = legit
+            objectsymmetryaxis[c] = m
+        
+        # cazuri generale
 
         for m in tanarray:
+
+            print(m)
 
             legit = 0
 
@@ -338,10 +447,8 @@ def magic(imagepath: str):
                             area2 += partialsumrow[i][w-1]
                         else:
                             area1 += partialsumrow[i][w-1]
-                
-                legit = abs(area1-area2) / (area1+area2+2)
 
-                if legit < symmetrythresh:
+                if abs(area1-area2) / (area1+area2+objectperimeters[c]//5) < symmetrythresh:
                     #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
 
                     legit = 0
@@ -356,54 +463,19 @@ def magic(imagepath: str):
 
                                 if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
                                     legit = legit + 1
+                    legit = (legit + objectperimeters[c]//2) / nrpixels[c]
             
-            else:
-
-                # y = m * (x - centroid[1]) + centroid[0]
-                # x = (y - centroid[0]) / m + centroid[1]
-                area1 = 0
-                area2 = 0
-                if w <= h:
-                    for j in range(w):
-                        i = int(centroid[0])
-                        if i >= 0 and i < h:
-                            if i > 0:
-                                area1 += partialsumcol[i-1][j]
-                            if i < h-1:
-                                area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
-                        elif i < 0:
-                            area2 += partialsumcol[h-1][j]
-                        else:
-                            area1 += partialsumcol[h-1][j]
-                else:
-                    for i in range(h):
-                        if i < int(centroid[0]):
-                            area1 += partialsumrow[i][w-1]
-                        elif i > int(centroid[0]):
-                            area2 += partialsumrow[i][w-1]
-                
-                legit = abs(area1-area2) / (area1+area2+2)
-
-                if legit < symmetrythresh:
-                    #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
-
-                    legit = 0
-                    for i in range (0, h):
-                        for j in range (0, w):
-                            if binaryelement[i][j] == 255:
-                                jb = j
-                                ib = int(centroid[0]+(centroid[0]-i))
-
-                                if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
-                                    legit = legit + 1
-            
-            legit = legit / nrpixels[c]
             if legit > objectsymmetryscore[c]:
                 objectsymmetryscore[c] = legit
                 objectsymmetryaxis[c] = m
         
         objectprops[c]['symmetry'] = objectsymmetryscore[c]
         objectprops[c]['symmetryaxis'] = objectsymmetryaxis[c]
+        objectprops[c]['contourlength'] = len(contours[c])
+
+        if objectsymmetryscore[c] >= finalsymmetrythresh:
+            cv.drawContours(onlyasymmetricalimg, [contours[c]], -1, color=bgcolor, thickness=cv.FILLED)
+            cv.drawContours(onlyasymmetricalimg, [contours[c]], -1, color=bgcolor, thickness=8)
         
         # concatenare
 
@@ -417,5 +489,9 @@ def magic(imagepath: str):
     objectpropsjson = json.dumps(objectprops, indent=2)
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
+    
+    cv.imshow("onlyasymmetricalimg", onlyasymmetricalimg)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
 
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

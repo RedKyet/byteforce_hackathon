@@ -14,8 +14,9 @@
       530
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\0.png",
-    "symmetry": 0.9596872574026838,
-    "symmetryaxis": 4.003101980092514,
+    "symmetry": 0.974880780747477,
+    "symmetryaxis": 3.732096503384459,
+    "contourlength": 480,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\0_withnumber.png"
   },
   {
@@ -33,8 +34,9 @@
       801
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\1.png",
-    "symmetry": 0.9874371859296482,
-    "symmetryaxis": -1.130540316848988,
+    "symmetry": 1.007309273640932,
+    "symmetryaxis": -1.1305403168490022,
+    "contourlength": 298,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\1_withnumber.png"
   },
   {
@@ -52,8 +54,9 @@
       221
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\2.png",
-    "symmetry": 0.9902593128866658,
-    "symmetryaxis": 0.5593587156449452,
+    "symmetry": 1.0118467816243253,
+    "symmetryaxis": 0.5155372400210498,
+    "contourlength": 276,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\2_withnumber.png"
   },
   {
@@ -71,8 +74,9 @@
       454
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\3.png",
-    "symmetry": 0.9909610527715007,
-    "symmetryaxis": 2.0765353336834105,
+    "symmetry": 1.012362089591918,
+    "symmetryaxis": 2.076535333683409,
+    "contourlength": 277,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\3_withnumber.png"
   },
   {
@@ -90,8 +94,9 @@
       679
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\4.png",
-    "symmetry": 0.9869620075704472,
-    "symmetryaxis": 0.4942039159827308,
+    "symmetry": 1.0091125753539885,
+    "symmetryaxis": 0.4942039159827312,
+    "contourlength": 272,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\4_withnumber.png"
   },
   {
@@ -109,8 +114,9 @@
       569
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\5.png",
-    "symmetry": 0.9652718474238543,
-    "symmetryaxis": -0.349907771545041,
+    "symmetry": 0.9886137204668375,
+    "symmetryaxis": -0.3885451296097204,
+    "contourlength": 275,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\5_withnumber.png"
   },
   {
@@ -128,8 +134,9 @@
       337
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\6.png",
-    "symmetry": 0.9622003235769966,
-    "symmetryaxis": -1.2539468391607822,
+    "symmetry": 0.9851448742462127,
+    "symmetryaxis": -1.253946839160797,
+    "contourlength": 266,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\6_withnumber.png"
   },
   {
@@ -147,8 +154,9 @@
       488
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\7.png",
-    "symmetry": 0.986952288218111,
-    "symmetryaxis": 0.0,
+    "symmetry": 1.0136319376825706,
+    "symmetryaxis": 1.633123935319537e+16,
+    "contourlength": 229,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\7_withnumber.png"
   },
   {
@@ -166,8 +174,9 @@
       383
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\8.png",
-    "symmetry": 0.9840425531914894,
-    "symmetryaxis": -1.0205996974289515,
+    "symmetry": 1.0114566284779052,
+    "symmetryaxis": -0.9864807768755146,
+    "contourlength": 220,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\8_withnumber.png"
   },
   {
@@ -185,8 +194,9 @@
       489
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\9.png",
-    "symmetry": 0.9658960860608835,
-    "symmetryaxis": 0.0,
+    "symmetry": 0.9956511787594415,
+    "symmetryaxis": 0,
+    "contourlength": 227,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\9_withnumber.png"
   },
   {
@@ -204,8 +214,9 @@
       598
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\10.png",
-    "symmetry": 0.9676250302005315,
-    "symmetryaxis": -16.31848230505987,
+    "symmetry": 0.9983087702343562,
+    "symmetryaxis": -22.60781788265488,
+    "contourlength": 215,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\10_withnumber.png"
   },
   {
@@ -223,8 +234,9 @@
       473
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\11.png",
-    "symmetry": 0.9514285714285714,
-    "symmetryaxis": -98.00052144718923,
+    "symmetry": 0.9996428571428572,
+    "symmetryaxis": 1.633123935319537e+16,
+    "contourlength": 216,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\11_withnumber.png"
   }
 ]

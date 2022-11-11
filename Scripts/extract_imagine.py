@@ -13,7 +13,7 @@ def magic(imagepath: str):
     path = path + '\\'
     photofolder = path + "photos\\"
     fontfilepath = "Scripts\\fontu.ttf"
-    binarythresh = 245
+    binarythresh = 248
     epsilonarie = 5.0
     epsilonper = 1
     epsilonbright = 0.005
@@ -109,6 +109,11 @@ def magic(imagepath: str):
 
     bgcolor = [int(s) for s in bgcolor]
 
+    for i in range(rows):
+        for j in range(cols):
+            if finalwbimg[i][j][0] == bgcolor[0] and finalwbimg[i][j][1] == bgcolor[1] and finalwbimg[i][j][2] == bgcolor[2]:
+                finalwbimg[i][j] = [255, 255, 255]
+
     wbimg = finalwbimg.copy()
 
     # get object contours
@@ -158,7 +163,7 @@ def magic(imagepath: str):
     for i in range(rows):
         for j in range(cols):
             ind = obtinere_index(indexedimg, i, j)
-            if ind >= 0:
+            if ind >= 0 and invbinaryimg[i][j] == 255:
                 nrpixels[ind] += 1
                 intensities[ind] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
 
@@ -167,8 +172,7 @@ def magic(imagepath: str):
     alphaimg = cv.cvtColor(img, cv.COLOR_BGR2BGRA)
     for i in range(rows):
         for j in range(cols):
-            ind = obtinere_index(indexedimg, i, j)
-            if ind >= 0:
+            if invbinaryimg[i][j] == 255:
                 alphaimg[i][j][3] = 255
             else:
                 alphaimg[i][j][3] = 0
@@ -244,7 +248,7 @@ def magic(imagepath: str):
     for i in range(rows):
         for j in range(cols):
             ind = obtinere_index(indexedimg, i, j)
-            if ind >= 0:
+            if ind >= 0 and invbinaryimg[i][j] == 255:
                 objectcentroidcol[ind] += j
                 objectcentroidrow[ind] += i
 
@@ -292,8 +296,10 @@ def magic(imagepath: str):
         for i in range(h):
             for j in range(w):
                 ind = obtinere_index(indexedimg, y+i, x+j)
-                if ind is not c:
+                if ind != c:
                     binaryelement[i][j] = 0
+        
+        cv.imwrite("{}_binarything.png", binaryelement)
 
         centroid = (objectcentroidrow[c]-y, objectcentroidcol[c]-x)
         partialsumrow = [[0 for j in range(cols)] for i in range(rows)]
@@ -421,7 +427,7 @@ def magic(imagepath: str):
         while theta < math.pi:
 
             m = math.tan(theta)
-            print(m)
+            print(theta)
 
             legit = 0
 

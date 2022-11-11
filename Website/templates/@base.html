@@ -54,13 +54,13 @@
             {% block background %}
             {% endblock background %}
 
-            ::-webkit-scrollbar {
+            {% comment %} ::-webkit-scrollbar {
                 width: 10px;
             }
 
             ::-webkit-scrollbar-track {
                 background: #1f2937;
-            }
+            } {% endcomment %}
 
             {% comment %} #256D85 to make scrollbar appear {% endcomment %}
             ::-webkit-scrollbar-thumb {
@@ -74,6 +74,15 @@
             
             *{
                 font-family: Clean
+            }
+
+            ::-webkit-scrollbar {
+                display: none;
+            }
+
+            *{
+                -ms-overflow-style: none; 
+                scrollbar-width: none; 
             }
 
         </style>

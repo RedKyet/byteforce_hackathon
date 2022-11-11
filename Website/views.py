@@ -36,7 +36,7 @@ def upload(request):
     #return JsonResponse({'foo':'bar'})
     uploaded_file = request.FILES['document']
     fs = FileSystemStorage()
-    path = 'users/'+str(request.session['id'])+'/cake.jpg'
+    path = 'users/'+str(request.session['id'])+'/cache.jpg'
     fs.delete(path)
     name = fs.save(path, uploaded_file)
     #Scripts\main.py

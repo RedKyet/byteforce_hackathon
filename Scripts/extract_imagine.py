@@ -1,3 +1,4 @@
+from cmath import sqrt
 import cv2 as cv
 import math
 import os
@@ -24,9 +25,12 @@ def magic(imagepath: str):
 
     if not os.path.exists(path+"photos"):
         os.mkdir(path+"photos")
-    
+        
     def obtinere_index(indeximg, line, column):
         return (((int(indeximg[line][column][2])) + ((int(indeximg[line][column][1])) << 8) + ((int(indeximg[line][column][0])) << 16)) - 1)
+
+
+    '''--------------------ADAUGAT-----------NUMAR--------------------------------- '''
 
     def adaugare_numar (a, num):
         draw = ImageDraw.Draw(a)
@@ -232,6 +236,7 @@ def magic(imagepath: str):
 
     # sort objects in decreasing order of areas AND calculate symmetry
 
+    image_number=0
     blanc = np.zeros((1, 1, 3), np.uint8)
     cv.imwrite(photofolder+"\\longlong.png", blanc)
 
@@ -291,8 +296,30 @@ def magic(imagepath: str):
 
         theta = 0
         while theta < math.pi:
+            #panta1 panta2
             m = math.tan(theta)
+            m2= -1//m
+
+            d = abs()
+            legit = 0
+            #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
+            for i in range (0, h):
+                for j in range (0,w):
+                    d = abs(i*m - j + centroid[0])// sqrt(1+m*m)
+
+                    x= (i-m2*j+m*centroid[1]-centroid[0])
+                    y= m*x+(-m*centroid[1]-centroid[0])
+                    ib = x+(x-i)
+                    jb = y+(y-j)
+
+
+                    if((ib<h & jb<w)&(binaryelement[i][j]==binaryelement[ib][jb])):
+                        legit=legit+1
+            
+            print(legit)
+
             # y = m * (x - centroid[1]) + centroid[0]
+            # 
             # y - centroid[0] = m * (x - centroid[1])
             # (y - centroid[0]) / m = x - centroid[1]
             # x = (y - centroid[0]) / m + centroid[1]
@@ -328,23 +355,23 @@ def magic(imagepath: str):
         
         # concatenare
 
-        adaugare_numar(im, c)
-        objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
-        rez = Image.open(photofolder+"longlong.png")
-        concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
+            adaugare_numar(im, c)
+            objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
+            rez = Image.open(photofolder+"longlong.png")
+            concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
 
     # print object properties
 
-    #for i in range(len(contours)):
-        #print(objectprops[i])
+        #for i in range(len(contours)):
+            #print(objectprops[i])
 
     # show images
 
     with open(path+"isdone.txt", "w") as isdonefile:
         isdonefile.write("100")
-    
+
     objectpropsjson = json.dumps(objectprops, indent=2)
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
-    
+
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

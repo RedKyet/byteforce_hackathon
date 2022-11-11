@@ -60,7 +60,7 @@ def magic(imagepath: str):
     bgcolor = (0, 0, 0)
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff)[3]
+    rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -69,7 +69,7 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (0, rows-1), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff)[3]
+    rect = cv.floodFill(wbimg, None, (0, rows-1), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -78,7 +78,7 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (cols-1, 0), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff)[3]
+    rect = cv.floodFill(wbimg, None, (cols-1, 0), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -87,7 +87,7 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (cols-1, rows-1), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff)[3]
+    rect = cv.floodFill(wbimg, None, (cols-1, rows-1), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -244,6 +244,12 @@ def magic(imagepath: str):
     blanc = np.zeros((1, 1, 3), np.uint8)
     cv.imwrite(photofolder+"\\longlong.png", blanc)
 
+    theta = 0
+    tanarray = []
+    while theta < math.pi:
+        tanarray.append(math.tan(theta))
+        theta += symmetrystep
+
     for c in range(len(contours)):
 
         # creare imagine cu numar
@@ -298,10 +304,7 @@ def magic(imagepath: str):
                 if binaryelement[i][j] == 255:
                     partialsumcol[i][j] += 1
 
-        theta = 0
-        while theta < math.pi:
-
-            m = math.tan(theta)
+        for m in tanarray:
 
             legit = 0
 
@@ -398,8 +401,6 @@ def magic(imagepath: str):
             if legit > objectsymmetryscore[c]:
                 objectsymmetryscore[c] = legit
                 objectsymmetryaxis[c] = m
-            
-            theta += symmetrystep
         
         objectprops[c]['symmetry'] = objectsymmetryscore[c]
         objectprops[c]['symmetryaxis'] = objectsymmetryaxis[c]
@@ -416,5 +417,5 @@ def magic(imagepath: str):
     objectpropsjson = json.dumps(objectprops, indent=2)
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
-        
+
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

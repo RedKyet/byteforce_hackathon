@@ -54,13 +54,16 @@ def magic(imagepath: str):
 
     originalimg = cv.imread(imgname, cv.IMREAD_UNCHANGED)
     rows, cols, _ = originalimg.shape
-    for i in range(rows):
-        for j in range(cols):
-            if originalimg[i][j][3] < 255:
-                originalimg[i][j][0] = 255
-                originalimg[i][j][1] = 255
-                originalimg[i][j][2] = 255
-    img = cv.cvtColor(originalimg, cv.COLOR_BGRA2BGR)
+    if len(originalimg[0][0]) == 4:
+        for i in range(rows):
+            for j in range(cols):
+                if originalimg[i][j][3] < 255:
+                    originalimg[i][j][0] = 255
+                    originalimg[i][j][1] = 255
+                    originalimg[i][j][2] = 255
+        img = cv.cvtColor(originalimg, cv.COLOR_BGRA2BGR)
+    else:
+        img = originalimg.copy()
 
     # turn background to white
 
@@ -281,7 +284,7 @@ def magic(imagepath: str):
         cv.imwrite(photofolder+"{}.png".format(c), element)
         im = Image.open(photofolder+"{}.png".format(c))
 
-        objectprops[c]['filename'] = photofolder+"{}.png".format(c)
+        objectprops[c]['filename'] = (photofolder+"{}.png".format(c)).split('\\', 1)[1]
 
         # calculare simetrie
 
@@ -487,7 +490,7 @@ def magic(imagepath: str):
         # concatenare
 
         adaugare_numar(im, c)
-        objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
+        objectprops[c]['withnumbername'] = (photofolder+"{}_withnumber.png".format(c)).split('\\', 1)[1]
         rez = Image.open(photofolder+"longlong.png")
         concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
     

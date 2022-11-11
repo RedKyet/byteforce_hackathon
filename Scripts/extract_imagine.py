@@ -413,9 +413,8 @@ def magic(imagepath: str):
 
     with open(path+"isdone.txt", "w") as isdonefile:
         isdonefile.write("100")
-
     objectpropsjson = json.dumps(objectprops, indent=2)
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
-
+        
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

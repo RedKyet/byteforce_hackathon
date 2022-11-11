@@ -9,17 +9,19 @@ from PIL import Image, ImageFont, ImageDraw
 def magic(imagepath: str):
 
     imgname = imagepath
-    path = imgname.rstrip('\\', 1)[0]
+    path = imgname.rsplit('\\', 1)[0]
     path = path + '\\'
     photofolder = path + "photos\\"
-    fontfilepath = "Scripts\\fontu.tff"
+    fontfilepath = "Scripts\\fontu.ttf"
     binarythresh = 245
     epsilonarie = 5.0
     epsilonper = 1
     epsilonbright = 0.005
     epsilondark = 0.005
-    symmetrystep = 0.017
+    symmetrystep = 0.051
     symmetrythresh = 0.2
+    lowfilldiff = 5
+    highfilldiff = 5
 
     ##########################################################################################################
 
@@ -58,7 +60,7 @@ def magic(imagepath: str):
     bgcolor = (0, 0, 0)
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=5, upDiff=5)[3]
+    rect = cv.floodFill(wbimg, None, (0, 0), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -67,7 +69,7 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (0, rows-1), (255, 255, 255), loDiff=5, upDiff=5)[3]
+    rect = cv.floodFill(wbimg, None, (0, rows-1), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -76,7 +78,7 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (cols-1, 0), (255, 255, 255), loDiff=5, upDiff=5)[3]
+    rect = cv.floodFill(wbimg, None, (cols-1, 0), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -85,7 +87,7 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     wbimg = img.copy()
-    rect = cv.floodFill(wbimg, None, (cols-1, rows-1), (255, 255, 255), loDiff=5, upDiff=5)[3]
+    rect = cv.floodFill(wbimg, None, (cols-1, rows-1), (255, 255, 255), loDiff=lowfilldiff, upDiff=highfilldiff, flags=4+cv.FLOODFILL_FIXED_RANGE)[3]
     rectarea = (rect[2]-rect[0]+1) * (rect[3]-rect[1]+1)
     if rectarea > bgbbarea:
         bgbb = rect
@@ -131,6 +133,8 @@ def magic(imagepath: str):
     objectperimeters = [0 for i in range(len(contours))]
     objectcentroidrow = [0 for i in range(len(contours))]
     objectcentroidcol = [0 for i in range(len(contours))]
+    objectsymmetryscore = [0 for i in range(len(contours))]
+    objectsymmetryaxis = [0 for i in range(len(contours))]
 
     # calculate object pixel number and intensities (RSUM + BSUM + GSUM)
 
@@ -240,6 +244,12 @@ def magic(imagepath: str):
     blanc = np.zeros((1, 1, 3), np.uint8)
     cv.imwrite(photofolder+"\\longlong.png", blanc)
 
+    theta = 0
+    tanarray = []
+    while theta < math.pi:
+        tanarray.append(math.tan(theta))
+        theta += symmetrystep
+
     for c in range(len(contours)):
 
         # creare imagine cu numar
@@ -294,82 +304,116 @@ def magic(imagepath: str):
                 if binaryelement[i][j] == 255:
                     partialsumcol[i][j] += 1
 
-        theta = 0
-        while theta < math.pi:
-            #panta1 panta2
-            m = math.tan(theta)
-            m2= -1//m
+        for m in tanarray:
 
-            d = abs()
             legit = 0
-            #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
-            for i in range (0, h):
-                for j in range (0,w):
-                    d = abs(i*m - j + centroid[0])// sqrt(1+m*m)
 
-                    x= (i-m2*j+m*centroid[1]-centroid[0])
-                    y= m*x+(-m*centroid[1]-centroid[0])
-                    ib = x+(x-i)
-                    jb = y+(y-j)
+            if m != 0:
 
+                # y = m * (x - centroid[1]) + centroid[0]
+                # x = (y - centroid[0]) / m + centroid[1]
+                area1 = 0
+                area2 = 0
+                if w <= h:
+                    for j in range(w):
+                        i = int(m * (j - centroid[1]) + centroid[0])
+                        if i >= 0 and i < h:
+                            if i > 0:
+                                area1 += partialsumcol[i-1][j]
+                            if i < h-1:
+                                area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
+                        elif i < 0:
+                            area2 += partialsumcol[h-1][j]
+                        else:
+                            area1 += partialsumcol[h-1][j]
+                else:
+                    for i in range(h):
+                        j = int((i - centroid[0]) / m + centroid[1])
+                        if j >= 0 and j < w:
+                            if j > 0:
+                                area1 += partialsumrow[i][j-1]
+                            if j < w-1:
+                                area2 += (partialsumrow[i][w-1] - partialsumrow[i][j])
+                        elif j < 0:
+                            area2 += partialsumrow[i][w-1]
+                        else:
+                            area1 += partialsumrow[i][w-1]
+                
+                legit = abs(area1-area2) / (area1+area2+2)
 
-                    if((ib<h & jb<w)&(binaryelement[i][j]==binaryelement[ib][jb])):
-                        legit=legit+1
+                if legit < symmetrythresh:
+                    #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
+
+                    legit = 0
+                    m2 = (-1) / m
+                    for i in range (0, h):
+                        for j in range (0, w):
+                            if binaryelement[i][j] == 255:
+                                x = (i-m2*j+m*centroid[1]-centroid[0])/(m-m2)
+                                y = m*x+(-m*centroid[1]+centroid[0])
+                                jb = int(x+(x-j))
+                                ib = int(y+(y-i))
+
+                                if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
+                                    legit = legit + 1
             
-            print(legit)
-
-            # y = m * (x - centroid[1]) + centroid[0]
-            # 
-            # y - centroid[0] = m * (x - centroid[1])
-            # (y - centroid[0]) / m = x - centroid[1]
-            # x = (y - centroid[0]) / m + centroid[1]
-            area1 = 0
-            area2 = 0
-            if w <= h:
-                for j in range(w):
-                    i = int(m * (j - centroid[1]) + centroid[0])
-                    if i >= 0 and i < h:
-                        if i > 0:
-                            area1 += partialsumcol[i-1][j]
-                        if i < h-1:
-                            area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
-                    elif i < 0:
-                        area2 += partialsumcol[h-1][j]
-                    else:
-                        area1 += partialsumcol[h-1][j]
             else:
-                for i in range(h):
-                    j = int((i - centroid[0]) / m + centroid[1])
-                    if j >= 0 and j < w:
-                        if j > 0:
-                            area1 += partialsumrow[i][j-1]
-                        if j < w-1:
-                            area2 += (partialsumrow[i][w-1] - partialsumrow[i][j])
-                    elif j < 0:
-                        area2 += partialsumrow[i][w-1]
-                    else:
-                        area1 += partialsumrow[i][w-1]
 
-            #if area1+area2 == 0 or abs(area1-area2)-10 / (area1+area2) < symmetrythresh:
-            theta += symmetrystep
+                # y = m * (x - centroid[1]) + centroid[0]
+                # x = (y - centroid[0]) / m + centroid[1]
+                area1 = 0
+                area2 = 0
+                if w <= h:
+                    for j in range(w):
+                        i = int(centroid[0])
+                        if i >= 0 and i < h:
+                            if i > 0:
+                                area1 += partialsumcol[i-1][j]
+                            if i < h-1:
+                                area2 += (partialsumcol[h-1][j] - partialsumcol[i][j])
+                        elif i < 0:
+                            area2 += partialsumcol[h-1][j]
+                        else:
+                            area1 += partialsumcol[h-1][j]
+                else:
+                    for i in range(h):
+                        if i < int(centroid[0]):
+                            area1 += partialsumrow[i][w-1]
+                        elif i > int(centroid[0]):
+                            area2 += partialsumrow[i][w-1]
+                
+                legit = abs(area1-area2) / (area1+area2+2)
+
+                if legit < symmetrythresh:
+                    #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
+
+                    legit = 0
+                    for i in range (0, h):
+                        for j in range (0, w):
+                            if binaryelement[i][j] == 255:
+                                jb = j
+                                ib = int(centroid[0]+(centroid[0]-i))
+
+                                if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
+                                    legit = legit + 1
+            
+            legit = legit / nrpixels[c]
+            if legit > objectsymmetryscore[c]:
+                objectsymmetryscore[c] = legit
+                objectsymmetryaxis[c] = m
+        
+        objectprops[c]['symmetry'] = objectsymmetryscore[c]
+        objectprops[c]['symmetryaxis'] = objectsymmetryaxis[c]
         
         # concatenare
 
-            adaugare_numar(im, c)
-            objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
-            rez = Image.open(photofolder+"longlong.png")
-            concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
-
-    # print object properties
-
-        #for i in range(len(contours)):
-            #print(objectprops[i])
-
-    # show images
+        adaugare_numar(im, c)
+        objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
+        rez = Image.open(photofolder+"longlong.png")
+        concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
 
     with open(path+"isdone.txt", "w") as isdonefile:
         isdonefile.write("100")
-
     objectpropsjson = json.dumps(objectprops, indent=2)
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)

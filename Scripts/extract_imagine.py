@@ -19,10 +19,11 @@ def magic(imagepath: str):
     epsilonbright = 0.005
     epsilondark = 0.005
     symmetrystep = 0.017
-    symmetrythresh = 0.04
+    symmetrythresh = 0.1
     lowfilldiff = 5
     highfilldiff = 5
     finalsymmetrythresh = 0.985
+    smallthresh = 10
 
     ##########################################################################################################
 
@@ -120,6 +121,11 @@ def magic(imagepath: str):
 
     contours = list(contours)
     contours.sort(key=lambda c:cv.contourArea(c), reverse=True)
+
+    # eliminate false objects (lmao)
+
+    while len(contours) > 0 and cv.contourArea(contours[len(contours)-1]) <= smallthresh:
+        contours.pop()
 
     # give indexes to objects
 
@@ -252,12 +258,6 @@ def magic(imagepath: str):
     blanc = np.zeros((1, 1, 3), np.uint8)
     cv.imwrite(photofolder+"\\longlong.png", blanc)
 
-    theta = symmetrystep
-    tanarray = []
-    while theta < math.pi:
-        tanarray.append(math.tan(theta))
-        theta += symmetrystep
-    
     onlyasymmetricalimg = img.copy()
 
     for c in range(len(contours)):
@@ -315,7 +315,8 @@ def magic(imagepath: str):
                     partialsumcol[i][j] += 1
         
         # cazul linie orizontala
-        
+
+        theta = 0
         m = 0
 
         legit = 0
@@ -342,8 +343,9 @@ def magic(imagepath: str):
                     area1 += partialsumrow[i][w-1]
                 elif i > int(centroid[0]):
                     area2 += partialsumrow[i][w-1]
-    
-        if abs(area1-area2) / (area1+area2+objectperimeters[c]//5) < symmetrythresh:
+
+        
+        if area1+area2 == 0 or (abs(area1-area2)-20) / (area1+area2) < symmetrythresh:
             #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
 
             legit = 0
@@ -362,7 +364,8 @@ def magic(imagepath: str):
             objectsymmetryaxis[c] = m
         
         # cazul linie verticala
-        
+
+        theta = math.pi/2
         m = math.tan(math.pi/2)
 
         legit = 0
@@ -391,7 +394,7 @@ def magic(imagepath: str):
                     area1 += partialsumrow[i][w-1]
                 
     
-        if abs(area1-area2) / (area1+area2+objectperimeters[c]//5) < symmetrythresh:
+        if area1+area2 == 0 or (abs(area1-area2)-20) / (area1+area2) < symmetrythresh:
             #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
 
             legit = 0
@@ -411,8 +414,10 @@ def magic(imagepath: str):
         
         # cazuri generale
 
-        for m in tanarray:
+        theta = symmetrystep
+        while theta < math.pi:
 
+            m = math.tan(theta)
             print(m)
 
             legit = 0
@@ -448,7 +453,7 @@ def magic(imagepath: str):
                         else:
                             area1 += partialsumrow[i][w-1]
 
-                if abs(area1-area2) / (area1+area2+objectperimeters[c]//5) < symmetrythresh:
+                if area1+area2 == 0 or (abs(area1-area2)-20) / (area1+area2) < symmetrythresh:
                     #iterat prin fiecare punct si calculat coordonatele punctului simetric(ib, jb)
 
                     legit = 0
@@ -468,6 +473,8 @@ def magic(imagepath: str):
             if legit > objectsymmetryscore[c]:
                 objectsymmetryscore[c] = legit
                 objectsymmetryaxis[c] = m
+            
+            theta += symmetrystep
         
         objectprops[c]['symmetry'] = objectsymmetryscore[c]
         objectprops[c]['symmetryaxis'] = objectsymmetryaxis[c]
@@ -483,6 +490,10 @@ def magic(imagepath: str):
         objectprops[c]['withnumbername'] = photofolder+"{}_withnumber.png".format(c)
         rez = Image.open(photofolder+"longlong.png")
         concatenare_orizontala(rez, im, (bgcolor[2],bgcolor[1],bgcolor[0])).save(photofolder+"longlong.png")
+    
+    objectpropsdict = {}
+    for i in range(len(contours)):
+        objectpropsdict[str(i)] = objectprops[i]
 
     with open(path+"isdone.txt", "w") as isdonefile:
         isdonefile.write("100")
@@ -494,5 +505,7 @@ def magic(imagepath: str):
     cv.imwrite(photofolder+"asymmetrical.png", onlyasymmetricalimg)
     cv.imwrite(photofolder+"bright_dark.png", onlybrightanddark)
     cv.imwrite(photofolder+"maxarea_minperimeter.png", onlymaxarieminper)
+
+    return objectpropsdict
 
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

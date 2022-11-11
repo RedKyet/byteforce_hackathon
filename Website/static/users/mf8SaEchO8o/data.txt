@@ -1,22 +1,122 @@
 [
   {
-    "intensities": 52149505,
-    "nrpixels": 103834,
-    "area": 103088.0,
-    "perimeter": 1573.671134710312,
-    "brightness": 502.23919910626574,
-    "centroidrow": 222.74469826838993,
-    "centroidcol": 183.02866113219176,
+    "intensities": 9563681,
+    "nrpixels": 27914,
+    "area": 27349.0,
+    "perimeter": 1231.5533845424652,
+    "brightness": 342.6123450598266,
+    "centroidrow": 123.23715698215949,
+    "centroidcol": 365.9292827971627,
     "boundingbox": [
-      18,
-      42,
-      429,
-      323
+      28,
+      263,
+      212,
+      459
     ],
     "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\0.png",
-    "symmetry": 0.9110984841188821,
+    "symmetry": 0.6631439421079028,
     "symmetryaxis": 1.633123935319537e+16,
-    "contourlength": 1490,
+    "contourlength": 1128,
     "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\0_withnumber.png"
+  },
+  {
+    "intensities": 9453632,
+    "nrpixels": 26042,
+    "area": 25763.0,
+    "perimeter": 630.558436870575,
+    "brightness": 363.0148222102757,
+    "centroidrow": 609.3956685354427,
+    "centroidcol": 361.2950234237002,
+    "boundingbox": [
+      512,
+      278,
+      705,
+      444
+    ],
+    "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\1.png",
+    "symmetry": 1.0052991321711082,
+    "symmetryaxis": 1.633123935319537e+16,
+    "contourlength": 556,
+    "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\1_withnumber.png"
+  },
+  {
+    "intensities": 9794634,
+    "nrpixels": 22992,
+    "area": 22649.0,
+    "perimeter": 733.7056245803833,
+    "brightness": 426.0018267223382,
+    "centroidrow": 362.8461638830898,
+    "centroidcol": 360.7393876130828,
+    "boundingbox": [
+      264,
+      286,
+      461,
+      436
+    ],
+    "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\2.png",
+    "symmetry": 0.708420320111343,
+    "symmetryaxis": 0,
+    "contourlength": 684,
+    "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\2_withnumber.png"
+  },
+  {
+    "intensities": 12577054,
+    "nrpixels": 22554,
+    "area": 22110.0,
+    "perimeter": 1004.4650719165802,
+    "brightness": 557.6418373680943,
+    "centroidrow": 123.25631816972599,
+    "centroidcol": 116.68537731666223,
+    "boundingbox": [
+      27,
+      30,
+      212,
+      203
+    ],
+    "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\3.png",
+    "symmetry": 0.5560876119535337,
+    "symmetryaxis": 1.633123935319537e+16,
+    "contourlength": 886,
+    "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\3_withnumber.png"
+  },
+  {
+    "intensities": 8198518,
+    "nrpixels": 17496,
+    "area": 17163.0,
+    "perimeter": 775.0092282295227,
+    "brightness": 468.59385002286234,
+    "centroidrow": 363.3129858253315,
+    "centroidcol": 116.3244170096022,
+    "boundingbox": [
+      266,
+      32,
+      460,
+      201
+    ],
+    "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\4.png",
+    "symmetry": 0.7253657978966621,
+    "symmetryaxis": 0,
+    "contourlength": 664,
+    "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\4_withnumber.png"
+  },
+  {
+    "intensities": 6509183,
+    "nrpixels": 11654,
+    "area": 11397.0,
+    "perimeter": 623.0092282295227,
+    "brightness": 558.5363823579887,
+    "centroidrow": 587.6217607688347,
+    "centroidcol": 95.07782735541446,
+    "boundingbox": [
+      517,
+      23,
+      700,
+      210
+    ],
+    "filename": "Website\\static\\users\\mf8SaEchO8o\\photos\\5.png",
+    "symmetry": 0.5287454951089755,
+    "symmetryaxis": 0.960013772757481,
+    "contourlength": 512,
+    "withnumbername": "Website\\static\\users\\mf8SaEchO8o\\photos\\5_withnumber.png"
   }
 ]

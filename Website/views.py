@@ -71,7 +71,6 @@ def dothemagic(request):
     return JsonResponse(magic("Website\\static\\users\\"+id+"\\cache.jpg"), safe=False)
 
 
-
 from cmath import sqrt
 import cv2 as cv
 import math
@@ -87,16 +86,16 @@ def magic(imagepath: str):
     path = path + '\\'
     photofolder = path + "photos\\"
     fontfilepath = "Scripts\\fontu.ttf"
-    binarythresh = 245
+    binarythresh = 240
     epsilonarie = 5.0
-    epsilonper = 1
+    epsilonper = 1.0
     epsilonbright = 0.005
     epsilondark = 0.005
-    symmetrystep = 0.1 #0.017
-    symmetrythresh = 0.1
+    symmetrystep = 0.017
+    symmetrythresh = 0.2
     lowfilldiff = 5
     highfilldiff = 5
-    finalsymmetrythresh = 0.985
+    finalsymmetrythresh = 0.998
     smallthresh = 10
 
     ##########################################################################################################
@@ -183,6 +182,11 @@ def magic(imagepath: str):
 
     bgcolor = [int(s) for s in bgcolor]
 
+    for i in range(rows):
+        for j in range(cols):
+            if finalwbimg[i][j][0] == bgcolor[0] and finalwbimg[i][j][1] == bgcolor[1] and finalwbimg[i][j][2] == bgcolor[2]:
+                finalwbimg[i][j] = [255, 255, 255]
+
     wbimg = finalwbimg.copy()
 
     # get object contours
@@ -232,7 +236,7 @@ def magic(imagepath: str):
     for i in range(rows):
         for j in range(cols):
             ind = obtinere_index(indexedimg, i, j)
-            if ind >= 0:
+            if ind >= 0 and invbinaryimg[i][j] == 255:
                 nrpixels[ind] += 1
                 intensities[ind] += (int(img[i][j][0]) + int(img[i][j][1]) + int(img[i][j][2]))
 
@@ -241,8 +245,7 @@ def magic(imagepath: str):
     alphaimg = cv.cvtColor(img, cv.COLOR_BGR2BGRA)
     for i in range(rows):
         for j in range(cols):
-            ind = obtinere_index(indexedimg, i, j)
-            if ind >= 0:
+            if invbinaryimg[i][j] == 255:
                 alphaimg[i][j][3] = 255
             else:
                 alphaimg[i][j][3] = 0
@@ -318,7 +321,7 @@ def magic(imagepath: str):
     for i in range(rows):
         for j in range(cols):
             ind = obtinere_index(indexedimg, i, j)
-            if ind >= 0:
+            if ind >= 0 and invbinaryimg[i][j] == 255:
                 objectcentroidcol[ind] += j
                 objectcentroidrow[ind] += i
 
@@ -338,6 +341,8 @@ def magic(imagepath: str):
     onlyasymmetricalimg = img.copy()
 
     for c in range(len(contours)):
+
+        print(c)
 
         # creare imagine cu numar
 
@@ -366,7 +371,7 @@ def magic(imagepath: str):
         for i in range(h):
             for j in range(w):
                 ind = obtinere_index(indexedimg, y+i, x+j)
-                if ind is not c:
+                if ind != c:
                     binaryelement[i][j] = 0
 
         centroid = (objectcentroidrow[c]-y, objectcentroidcol[c]-x)
@@ -390,6 +395,15 @@ def magic(imagepath: str):
                 partialsumcol[i][j] = partialsumcol[i-1][j]
                 if binaryelement[i][j] == 255:
                     partialsumcol[i][j] += 1
+        
+        # normalizare symmetrystep
+
+        if h+w <= 180:
+            symmetrystep = 0.054
+        elif h+w <= 360:
+            symmetrystep = 0.036
+        else:
+            symmetrystep = 0.036
         
         # cazul linie orizontala
 
@@ -434,7 +448,7 @@ def magic(imagepath: str):
 
                         if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
                             legit = legit + 1
-            legit = (legit + objectperimeters[c]//2) / nrpixels[c]
+            legit = (legit + objectperimeters[c]//3) / nrpixels[c]
         
         if legit > objectsymmetryscore[c]:
             objectsymmetryscore[c] = legit
@@ -483,7 +497,7 @@ def magic(imagepath: str):
 
                         if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
                             legit = legit + 1
-            legit = (legit + objectperimeters[c]//2) / nrpixels[c]
+            legit = (legit + objectperimeters[c]//3) / nrpixels[c]
         
         if legit > objectsymmetryscore[c]:
             objectsymmetryscore[c] = legit
@@ -495,7 +509,6 @@ def magic(imagepath: str):
         while theta < math.pi:
 
             m = math.tan(theta)
-            print(m)
 
             legit = 0
 
@@ -545,7 +558,7 @@ def magic(imagepath: str):
 
                                 if ib >= 0 and ib < h and jb >= 0 and jb < w and binaryelement[i][j] == binaryelement[ib][jb]:
                                     legit = legit + 1
-                    legit = (legit + objectperimeters[c]//2) / nrpixels[c]
+                    legit = (legit + objectperimeters[c]//3) / nrpixels[c]
             
             if legit > objectsymmetryscore[c]:
                 objectsymmetryscore[c] = legit

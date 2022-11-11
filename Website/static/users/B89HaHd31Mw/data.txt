@@ -1,0 +1,242 @@
+[
+  {
+    "intensities": 6829556,
+    "nrpixels": 17926,
+    "area": 17692.0,
+    "perimeter": 539.3036036491394,
+    "brightness": 380.9860537766373,
+    "centroidrow": 84.57062367510878,
+    "centroidcol": 450.09249135334153,
+    "boundingbox": [
+      9,
+      376,
+      156,
+      529
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\0.png",
+    "symmetry": 0.9705455762579493,
+    "symmetryaxis": 4.1077660751190725,
+    "contourlength": 478,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\0_withnumber.png"
+  },
+  {
+    "intensities": 3087546,
+    "nrpixels": 8705,
+    "area": 8560.5,
+    "perimeter": 347.11983811855316,
+    "brightness": 354.68650201033887,
+    "centroidrow": 216.23136128661687,
+    "centroidcol": 748.5610568638714,
+    "boundingbox": [
+      164,
+      697,
+      268,
+      801
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\1.png",
+    "symmetry": 1.0019529006318209,
+    "symmetryaxis": -1.0329250633765892,
+    "contourlength": 297,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\1_withnumber.png"
+  },
+  {
+    "intensities": 2913387,
+    "nrpixels": 7549,
+    "area": 7410.0,
+    "perimeter": 323.22034335136414,
+    "brightness": 385.93018942906343,
+    "centroidrow": 215.13154060140417,
+    "centroidcol": 172.36998277917604,
+    "boundingbox": [
+      166,
+      124,
+      264,
+      221
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\2.png",
+    "symmetry": 1.0046363756788979,
+    "symmetryaxis": 0.5515076776747485,
+    "contourlength": 276,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\2_withnumber.png"
+  },
+  {
+    "intensities": 3150775,
+    "nrpixels": 7479,
+    "area": 7341.0,
+    "perimeter": 320.3919162750244,
+    "brightness": 421.2829255248028,
+    "centroidrow": 222.14935151758257,
+    "centroidcol": 405.02460221954806,
+    "boundingbox": [
+      174,
+      358,
+      271,
+      454
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\3.png",
+    "symmetry": 1.0054820163123412,
+    "symmetryaxis": 2.0450551798785574,
+    "contourlength": 274,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\3_withnumber.png"
+  },
+  {
+    "intensities": 2546415,
+    "nrpixels": 7091,
+    "area": 6953.5,
+    "perimeter": 317.3208485841751,
+    "brightness": 359.10520377943874,
+    "centroidrow": 218.38189253983924,
+    "centroidcol": 632.4548018615146,
+    "boundingbox": [
+      170,
+      585,
+      266,
+      679
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\4.png",
+    "symmetry": 1.0004230714990834,
+    "symmetryaxis": 0.5054523886414172,
+    "contourlength": 273,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\4_withnumber.png"
+  },
+  {
+    "intensities": 3106836,
+    "nrpixels": 6936,
+    "area": 6832.5,
+    "perimeter": 323.4629839658737,
+    "brightness": 447.92906574394465,
+    "centroidrow": 212.02148212226066,
+    "centroidcol": 520.1304786620531,
+    "boundingbox": [
+      166,
+      473,
+      259,
+      569
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\5.png",
+    "symmetry": 0.9838523644752019,
+    "symmetryaxis": -0.4294012760041367,
+    "contourlength": 275,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\5_withnumber.png"
+  },
+  {
+    "intensities": 2880528,
+    "nrpixels": 6748,
+    "area": 6615.0,
+    "perimeter": 312.04877042770386,
+    "brightness": 426.8713692946058,
+    "centroidrow": 222.28186129223474,
+    "centroidcol": 288.57053941908714,
+    "boundingbox": [
+      172,
+      244,
+      269,
+      337
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\6.png",
+    "symmetry": 0.9770302311796087,
+    "symmetryaxis": -1.2852885456884415,
+    "contourlength": 264,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\6_withnumber.png"
+  },
+  {
+    "intensities": 1420386,
+    "nrpixels": 5091,
+    "area": 4976.0,
+    "perimeter": 265.2792184352875,
+    "brightness": 278.9994107248085,
+    "centroidrow": 435.9563936358279,
+    "centroidcol": 449.63209585543115,
+    "boundingbox": [
+      395,
+      411,
+      477,
+      488
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\7.png",
+    "symmetry": 1.006874877234335,
+    "symmetryaxis": 1.633123935319537e+16,
+    "contourlength": 228,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\7_withnumber.png"
+  },
+  {
+    "intensities": 1437017,
+    "nrpixels": 4834,
+    "area": 4723.0,
+    "perimeter": 261.4213538169861,
+    "brightness": 297.27285891601156,
+    "centroidrow": 331.8206454282168,
+    "centroidcol": 343.1179147703765,
+    "boundingbox": [
+      291,
+      304,
+      371,
+      383
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\8.png",
+    "symmetry": 0.9993793959453868,
+    "symmetryaxis": -0.8623017531097633,
+    "contourlength": 220,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\8_withnumber.png"
+  },
+  {
+    "intensities": 1648708,
+    "nrpixels": 4318,
+    "area": 4204.5,
+    "perimeter": 259.37972366809845,
+    "brightness": 381.82213987957385,
+    "centroidrow": 332.43862899490506,
+    "centroidcol": 454.4747568318666,
+    "boundingbox": [
+      292,
+      421,
+      373,
+      488
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\9.png",
+    "symmetry": 0.9840203798054655,
+    "symmetryaxis": 0,
+    "contourlength": 225,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\9_withnumber.png"
+  },
+  {
+    "intensities": 1454451,
+    "nrpixels": 4098,
+    "area": 3989.0,
+    "perimeter": 249.9655101299286,
+    "brightness": 354.91727672035137,
+    "centroidrow": 333.6666666666667,
+    "centroidcol": 557.7598828696925,
+    "boundingbox": [
+      302,
+      519,
+      367,
+      598
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\10.png",
+    "symmetry": 0.9851146900927281,
+    "symmetryaxis": -6.308686756338347,
+    "contourlength": 216,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\10_withnumber.png"
+  },
+  {
+    "intensities": 673641,
+    "nrpixels": 2699,
+    "area": 2657.0,
+    "perimeter": 250.45079135894775,
+    "brightness": 249.5891070766951,
+    "centroidrow": 542.7862171174509,
+    "centroidcol": 448.22378658762506,
+    "boundingbox": [
+      489,
+      423,
+      578,
+      473
+    ],
+    "filename": "static\\users\\B89HaHd31Mw\\photos\\11.png",
+    "symmetry": 1.0051871063356799,
+    "symmetryaxis": 1.633123935319537e+16,
+    "contourlength": 214,
+    "withnumbername": "static\\users\\B89HaHd31Mw\\photos\\11_withnumber.png"
+  }
+]

@@ -491,8 +491,8 @@ def magic(imagepath: str):
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
     
-    cv.imwrite("asymmetrical.png", onlyasymmetricalimg)
-    cv.imwrite("bright_dark.png", onlybrightanddark)
-    cv.imwrite("maxarea_minperimeter", onlymaxarieminper)
+    cv.imwrite(photofolder+"asymmetrical.png", onlyasymmetricalimg)
+    cv.imwrite(photofolder+"bright_dark.png", onlybrightanddark)
+    cv.imwrite(photofolder+"maxarea_minperimeter.png", onlymaxarieminper)
 
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

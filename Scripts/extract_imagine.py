@@ -487,11 +487,12 @@ def magic(imagepath: str):
     with open(path+"isdone.txt", "w") as isdonefile:
         isdonefile.write("100")
     objectpropsjson = json.dumps(objectprops, indent=2)
+    objectpropsjsononeline = objectpropsjson.strip('\r\n\t ')
     with open(path+"data.txt", "w") as objectpropsfile:
         objectpropsfile.write(objectpropsjson)
     
-    cv.imshow("onlyasymmetricalimg", onlyasymmetricalimg)
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+    cv.imwrite("asymmetrical.png", onlyasymmetricalimg)
+    cv.imwrite("bright_dark.png", onlybrightanddark)
+    cv.imwrite("maxarea_minperimeter", onlymaxarieminper)
 
 magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")

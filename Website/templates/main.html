@@ -26,8 +26,8 @@
 
 <form id="f" action = "upload" method = "post" enctype = "multipart/form-data" class="flex justify-center items-center w-full" target="frame">
     {% csrf_token %}  
-    <div class="animate__animated animate__fadeIn md:container mx-80">
-        <label class="fil flex flex-col justify-center items-center w-full h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
+    <div class="animate__animated animate__fadeIn md:container-xl md:mx-auto">
+        <label class="px-16 fil flex flex-col justify-center items-center w-full  h-64 bg-gray-50 rounded-lg border-2 border-gray-300 border-dashed cursor-pointer dark:bg-gray-700">
             <input type="file" name = "document" class="w-full h-64" accept = "image/png, image/jpg, image/jpeg" multiple style="position:absolute;opacity: 0;outline: 0;border: 1px solid red;">
 
             <div class="flex flex-col justify-center items-center pb-5 pt-5">
@@ -38,7 +38,7 @@
         </label>
     </div>
 </form>
-<img id="userpicture" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" width="200" height="300">
+<img id="userpicture" src="http://127.0.0.1:8000/static/users/g7F9kbFqmv8/cache.jpg" onerror="this.src='static/blank.png'" width="200" height="300">
 <script>
     $('input[type=file]').change(function() {
         //console.log(this.files);
@@ -107,5 +107,5 @@ body {
 {% endblock background %}
 
 {% block nav3 %}
-<a href="\tool" class="block py-2 pr-4 pl-3 text-gray-700 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-sky-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Services</a>
+<a href="/tool" class="block py-2 pr-4 pl-3 text-white bg-sky-400 rounded md:bg-transparent md:text-sky-400 md:p-0 dark:text-white" aria-current="page">Services</a>
 {% endblock nav3 %}

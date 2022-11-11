@@ -269,6 +269,8 @@ def magic(imagepath: str):
 
     for c in range(len(contours)):
 
+        print(c)
+
         # creare imagine cu numar
 
         x, y, w, h = cv.boundingRect(contours[c])
@@ -298,8 +300,6 @@ def magic(imagepath: str):
                 ind = obtinere_index(indexedimg, y+i, x+j)
                 if ind != c:
                     binaryelement[i][j] = 0
-        
-        cv.imwrite("{}_binarything.png", binaryelement)
 
         centroid = (objectcentroidrow[c]-y, objectcentroidcol[c]-x)
         partialsumrow = [[0 for j in range(cols)] for i in range(rows)]
@@ -436,7 +436,6 @@ def magic(imagepath: str):
         while theta < math.pi:
 
             m = math.tan(theta)
-            print(theta)
 
             legit = 0
 
@@ -526,4 +525,4 @@ def magic(imagepath: str):
 
     return objectpropsdict
 
-magic("Website\\static\\users\\mf8SaEchO8o\\cake.png")
+magic("Website\\static\\users\\mf8SaEchO8o\\start.png")

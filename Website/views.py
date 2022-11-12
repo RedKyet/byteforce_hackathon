@@ -93,8 +93,8 @@ def magic(imagepath: str):
     epsilondark = 0.005
     symmetrystep = 0.017
     symmetrythresh = 0.2
-    lowfilldiff = 5
-    highfilldiff = 5
+    lowfilldiff = 3
+    highfilldiff = 3
     finalsymmetrythresh = 0.998
     smallthresh = 10
 
@@ -181,12 +181,12 @@ def magic(imagepath: str):
         finalwbimg = wbimg.copy()
 
     bgcolor = [int(s) for s in bgcolor]
-
+    
     for i in range(rows):
         for j in range(cols):
             if finalwbimg[i][j][0] == bgcolor[0] and finalwbimg[i][j][1] == bgcolor[1] and finalwbimg[i][j][2] == bgcolor[2]:
                 finalwbimg[i][j] = [255, 255, 255]
-
+    
     wbimg = finalwbimg.copy()
 
     # get object contours
@@ -207,7 +207,16 @@ def magic(imagepath: str):
 
     while len(contours) > 0 and cv.contourArea(contours[len(contours)-1]) <= smallthresh:
         contours.pop()
-
+    '''
+    filledbinaryimg = np.zeros((rows, cols), np.uint8)
+    cv.drawContours(filledbinaryimg, contours, -1, 255, cv.FILLED)
+    cv.drawContours(filledbinaryimg, contours, -1, 255, 3)
+    
+    
+    invbinaryimg = filledbinaryimg.copy()
+    
+    cv.imwrite("supercoolimg.png", invbinaryimg)
+    '''
     # give indexes to objects
 
     indexedimg = np.zeros((rows, cols, 3), np.uint8)

@@ -107,19 +107,19 @@
     }
     ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/asymmetrical.png" onerror="this.src='static/loading.png'">`
     ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
-        <p>asymmetrical.png</p>
+        <p>Symmetrical Objects Removed</p>
     </div>`
     ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/bright_dark.png" onerror="this.src='static/loading.png'">`
     ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
-        <p>bright_dark.png</p>
+        <p>Brightest & Darkest</p>
     </div>`
     ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/longlong.png" onerror="this.src='static/loading.png'">`
     ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
-        <p>longlong.png</p>
+        <p>Sorted by Area</p>
     </div>`
     ans.innerHTML+=`<img id="" src="http://127.0.0.1:8000/static/users/${id}/photos/maxarea_minperimeter.png" onerror="this.src='static/loading.png'">`
     ans.innerHTML+=`<div class="py-16 text-center animate__animated animate__fadeIn" style="font-size: 3rem">
-        <p>maxarea_minperimeter.png</p>
+        <p>Maximum Area, Minimum Perimeter</p>
     </div>`
 
 
@@ -167,6 +167,9 @@ async function fetchMovies() {
 </script>
 <iframe name="frame" style="display:none"></iframe>
 {% endblock content %}
+
+{% block hover %}
+{% endblock hover %}
 
 {% block background %}
 body {  
